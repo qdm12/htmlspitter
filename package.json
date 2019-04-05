@@ -1,0 +1,30 @@
+{
+  "name": "htmlspitter",
+  "version": "1.0.0",
+  "description": "NodeJS server to spit out HTML from loaded JS using Puppeteer",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "tsc":"tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/qdm12/htmlspitter.git"
+  },
+  "keywords": [
+    "puppeteer",
+    "html",
+    "javascript",
+    "scrap",
+    "scrapper"
+  ],
+  "author": "Quentin McGaw",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/qdm12/htmlspitter/issues"
+  },
+  "homepage": "https://github.com/qdm12/htmlspitter#readme",
+  "dependencies": {
+    "typescript": "^3.4.1"
+  }
+}
