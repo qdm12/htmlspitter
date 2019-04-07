@@ -6,7 +6,14 @@ const app = express();
 type formattingType = "json" | "raw";
 
 app.get('/', async (req, res, next) => {
-    const init = initEndpointIfNeeded();
+    let init = null;
+    try {
+        init = initEndpointIfNeeded();
+    } catch(e) {
+        return res.status(403).send({
+            "error": String(e)
+        });
+    }
     const url = req.query["url"];
     if (url === undefined) {
         return res.status(403).send({
@@ -22,9 +29,8 @@ app.get('/', async (req, res, next) => {
         });
     } catch(e) {
         console.error(e);
-        const message = String(e);
         return res.status(403).send({
-            "error": message
+            "error": String(e)
         });
     }
 });

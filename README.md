@@ -56,6 +56,7 @@ npm run start
 
 ## TODOs
 
+- [ ] Fix Docker, see https://github.com/GoogleChrome/puppeteer/blob/master/docs/troubleshooting.md#running-puppeteer-in-docker
 - [ ] Nodemon
 - [ ] Unit testing and remove jest
 - [ ] Terminate browser on exit of program
