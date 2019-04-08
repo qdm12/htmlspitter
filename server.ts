@@ -2,6 +2,12 @@ import express from 'express';
 import { spitHTML, initEndpointIfNeeded, initBrowser } from './loader';
 
 const main = async () => {
+    console.log("\n =========================================");
+    console.log(" =========================================");
+    console.log(" ============== HTMLSpitter ==============");
+    console.log(" =========================================");
+    console.log(" =========================================");
+    console.log(" == by github.com/qdm12 - Quentin McGaw ==\n");
     try {
         await initBrowser();
     } catch (e) {
