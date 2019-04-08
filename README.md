@@ -2,6 +2,36 @@
 
 NodeJS server to spit out HTML from loaded JS using Puppeteer
 
+[![htmlspitter](https://github.com/qdm12/htmlspitter/raw/master/title.png)](https://hub.docker.com/r/qmcgaw/htmlspitter)
+
+[![Build Status](https://travis-ci.org/qdm12/htmlspitter.svg?branch=master)](https://travis-ci.org/qdm12/htmlspitter)
+[![Docker Build Status](https://img.shields.io/docker/build/qmcgaw/htmlspitter.svg)](https://hub.docker.com/r/qmcgaw/htmlspitter)
+
+[![GitHub last commit](https://img.shields.io/github/last-commit/qdm12/htmlspitter.svg)](https://github.com/qdm12/htmlspitter/issues)
+[![GitHub commit activity](https://img.shields.io/github/commit-activity/y/qdm12/htmlspitter.svg)](https://github.com/qdm12/htmlspitter/issues)
+[![GitHub issues](https://img.shields.io/github/issues/qdm12/htmlspitter.svg)](https://github.com/qdm12/htmlspitter/issues)
+
+[![Docker Pulls](https://img.shields.io/docker/pulls/qmcgaw/htmlspitter.svg)](https://hub.docker.com/r/qmcgaw/htmlspitter)
+[![Docker Stars](https://img.shields.io/docker/stars/qmcgaw/htmlspitter.svg)](https://hub.docker.com/r/qmcgaw/htmlspitter)
+[![Docker Automated](https://img.shields.io/docker/automated/qmcgaw/htmlspitter.svg)](https://hub.docker.com/r/qmcgaw/htmlspitter)
+
+[![Image size](https://images.microbadger.com/badges/image/qmcgaw/htmlspitter.svg)](https://microbadger.com/images/qmcgaw/htmlspitter)
+[![Image version](https://images.microbadger.com/badges/version/qmcgaw/htmlspitter.svg)](https://microbadger.com/images/qmcgaw/htmlspitter)
+
+[![Donate PayPal](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://paypal.me/qdm12)
+
+| Image size | RAM usage | CPU usage |
+| --- | --- | --- |
+| 380MB | Depends | Depends |
+
+Docker image is based on:
+
+- [NodeJS Alpine](https://hub.docker.com/_/node/)
+- [Chromium 72.0.3626.121-r0](https://pkgs.alpinelinux.org/package/v3.9/community/x86_64/chromium) with its dependencies `harfbuzz` and `nss`
+- [Puppeteer 1.14](https://github.com/GoogleChrome/puppeteer/releases/tag/v1.14.0)
+
+Program is written in Typescript
+
 ## Description
 
 The server accepts HTTP requests with two URL parameters:
@@ -12,14 +42,9 @@ The server accepts HTTP requests with two URL parameters:
     - `networkidle0` (default)
     - `networkidle2`
 
-An example of a request is `http://localhost:8000/?url=https://github.com/qdm12/htmlspitter`, which could be obtained with for example:
+An example of a request is `http://localhost:8000/?url=https://github.com/qdm12/htmlspitter`.
 
-```sh
-wget http://localhost:8000/?url=https://github.com/qdm12/htmlspitter
-```
-
-It uses headless chromium with Puppeteer to obtain Javascript processed HTML.
-It also has a built in memory cache holding HTML records obtained during a one hour period.
+The server also has a built in memory cache holding HTML records obtained during the last hour.
 
 ## Run the server
 
@@ -82,13 +107,20 @@ It also has a built in memory cache holding HTML records obtained during a one h
 - [ ] Dev readme
     - [ ] Nodemon
 - [ ] Unit testing and remove jest
+- [ ] Graceful shutdown, see [this](https://hackernoon.com/graceful-shutdown-in-nodejs-2f8f59d1c357?gi=3ce24ce63c60)
 - [ ] Docker Healthcheck
 - [ ] Environment variables
     - Verbosity level
 - [ ] Static binary in Scratch Docker image
 - [ ] Redis cache (compressed string)
 - [ ] Multiple threads, need for mutex for cache?
+- [ ] Add colors, emojis
+- [ ] ARM image with Travis CI
 
 ## Credits
 
 - To [jessfraz](https://github.com/jessfraz) for [chrome.json](chrome.json)
+
+## License
+
+This repository is under an [MIT license](https://github.com/qdm12/htmlspitter/master/license)
