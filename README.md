@@ -41,6 +41,8 @@ It also has a built in memory cache holding HTML records obtained during a one h
     docker logs htmlspitter
     ```
 
+    You can also use [docker-compose.yml](docker-compose.yml).
+
 ### Using local NodeJS
 
 1. Make sure you have a recent NodeJS and NPM installed

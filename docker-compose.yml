@@ -1,0 +1,12 @@
+version: '3.7'
+services:
+  htmlspitter:
+    build: https://github.com/qdm12/htmlspitter.git
+    image: qmcgaw/htmlspitter
+    container_name: htmlspitter
+    network_mode: bridge
+    security_opt:
+      - seccomp=./chrome.json
+    ports:
+      - 8000:8000/tcp
+    restart: always
