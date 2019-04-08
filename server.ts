@@ -1,15 +1,23 @@
 import express from 'express';
-import { spitHTML, initEndpointIfNeeded } from './loader';
+import { spitHTML, initEndpointIfNeeded, initBrowser } from './loader';
+
+const main = async () => {
+    try {
+        await initBrowser();
+    } catch (e) {
+        console.error("Cannot initialize chrome endpoint: ", e);
+        return;
+    }
+    app.listen(8000, () => console.log("Server listening on port 8000"));
+}
 
 const app = express();
 
-type formattingType = "json" | "raw";
-
 app.get('/', async (req, res, next) => {
-    let init = null;
     try {
-        init = initEndpointIfNeeded();
+        await initEndpointIfNeeded();
     } catch(e) {
+        console.error("Cannot initialize chrome endpoint: ", e);
         return res.status(403).send({
             "error": String(e)
         });
@@ -21,7 +29,6 @@ app.get('/', async (req, res, next) => {
         });
     }
     const wait = req.query["wait"];
-    await init;
     try {
         const html = await spitHTML(url, wait);
         return res.status(200).send({
@@ -35,4 +42,4 @@ app.get('/', async (req, res, next) => {
     }
 });
 
-app.listen(8000, () => console.log("Server listening on port 8000"));
+main();

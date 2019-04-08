@@ -1,31 +1,77 @@
 import puppeteer from 'puppeteer';
 import { cacheHasValue, getCacheHTML, setCacheValue, cleanOldCache, cleanOlderCache } from './cache';
 
-let browserWSEndpoint:string = "";
+let browser:puppeteer.Browser;
+const connOptions:puppeteer.ConnectOptions = {};
 
 /**
- * Launch an instance of headless Chrome if no 
- * websocket endpoint is present (at start for example)
+ * Set up a web socket endpoint to a Chromium browser.
+ * It launches a Chromium instance if none is found.
  */
 export const initEndpointIfNeeded = async () => {
-    if (browserWSEndpoint.length === 0) {
-        const browser = await puppeteer.launch({headless:true});
-        browserWSEndpoint = await browser.wsEndpoint();
+    if (browser === null) {
+        await initBrowser();
+        const newBrowser:puppeteer.Browser = browser;
+        if (newBrowser === null) {
+            throw Error("browser was initiated but is still null");
+        } else {
+            browser = newBrowser;
+            connOptions.browserWSEndpoint = await browser.wsEndpoint();
+        }
+    } else if (connOptions.browserWSEndpoint === undefined) {
+        try {
+            connOptions.browserWSEndpoint = await browser.wsEndpoint();
+        } catch(e) {
+            console.warn(e);
+            await initBrowser();
+            connOptions.browserWSEndpoint = await browser.wsEndpoint();
+        }
     }
 }
 
+/**
+ * Launch an instance of headless Chrome
+ * @returns puppeteer launched browser
+ */
+export const initBrowser = async () => {
+    let executablePath:string|undefined = undefined;
+    if (process.env.PUPPETEER_SKIP_CHROMIUM_DOWNLOAD === "1") {
+        console.log("Using OS chromium");
+        executablePath = "/usr/bin/chromium-browser";
+    } else {
+        console.log("Using Puppeteer bundled chromium")
+    }
+    browser = await puppeteer.launch({
+        headless:true,
+        executablePath,
+        args: [
+            "--disable-dev-shm-usage",
+            "--disable-background-networking",
+            "--disable-default-apps",
+            "--disable-extensions",
+            "--disable-gpu",
+            "--disable-sync",
+            "--disable-translate",
+            "--hide-scrollbars",
+            "--metrics-recording-only",
+            "--mute-audio",
+            "--no-first-run",
+            "--safebrowsing-disable-auto-update"
+        ]
+    });
+}
 
 /**
  * 
  * @param url URL to prerender
  * @param wait Load event option for prerendering
+ * @returns string of loaded html
  */
 export const spitHTML = async (url:string, wait:string|undefined) => {
     if (cacheHasValue(url)) {
         return getCacheHTML(url);
     }
     // TODO check url format
-    const urlObj = new URL(url);
     let waitUntil:puppeteer.LoadEvent;
     switch (wait) {
         case "load":
@@ -46,9 +92,6 @@ export const spitHTML = async (url:string, wait:string|undefined) => {
         default:
             throw Error("wait parameter ${wait} is invalid");
     }
-    const connOptions:puppeteer.ConnectOptions = {
-        browserWSEndpoint
-    };
     const browser = await puppeteer.connect(connOptions);
     const page = await browser.newPage();
     await page.setRequestInterception(true);
@@ -93,8 +136,4 @@ export const spitHTML = async (url:string, wait:string|undefined) => {
     await t0, t1;
     setCacheValue(url, html); // async but no need to wait
     return html;
-}
-
-async function onExit(browser:puppeteer.Browser) {
-    await browser.close();
 }
