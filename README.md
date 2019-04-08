@@ -18,51 +18,75 @@ An example of a request is `http://localhost:8000/?url=https://github.com/qdm12/
 wget http://localhost:8000/?url=https://github.com/qdm12/htmlspitter
 ```
 
+It uses headless chromium with Puppeteer to obtain Javascript processed HTML.
+It also has a built in memory cache holding HTML records obtained during a one hour period.
+
 ## Run the server
 
 ### Using Docker
 
-1. Pull the Docker image and launch the container
+1. Download [chrome.json](chrome.json) to allow Chromium to be launched inside the container (Alpine)
 
     ```sh
-    docker run -d --name=htmlspitter -p 8000:8000 qmcgaw/htmlspitter
+    wget https://raw.githubusercontent.com/qdm12/htmlspitter/master/chrome.json
     ```
 
-1. Check Docker logs
+1. Pull, run and test the container
 
     ```sh
-    docker logs -f htmlspitter
+    docker run -d --name=htmlspitter --security-opt seccomp=$(pwd)/chrome.json -p 8000:8000 qmcgaw/htmlspitter
+    # Try a request
+    wget -qO- http://localhost:8000/?url=https://github.com/qdm12/htmlspitter
+    # Check the logs
+    docker logs htmlspitter
     ```
 
-    Press CTRL+C to quit
+### Using local NodeJS
 
-### Using NodeJS only
+1. Make sure you have a recent NodeJS and NPM installed
+1. Clone the repository
 
-Follow these commands:
+    ```sh
+    git clone https://github.com/qdm12/htmlspitter
+    cd htmlspitter
+    ```
 
-```sh
-# Clone the repository
-git clone https://github.com/qdm12/htmlspitter
-# Go to the cloned repository directory
-cd htmlspitter
-# Make sure you have a recent NodeJS and NPM installed
-# Install the dependencies
-npm i
-# Transcompile the Typescript code to Javascript
-npm run build
-# Launch the server
-npm run start
-```
+1. Install all the dependencies
+
+    ```sh
+    npm i
+    ```
+
+1. Transcompile the Typescript code to Javascript
+
+    ```sh
+    npm run build
+    ```
+
+1. Launch the server
+
+    ```sh
+    npm run start
+    ```
+
+1. In another terminal, test it with
+
+    ```sh
+    wget -qO- http://localhost:8000/?url=https://github.com/qdm12/htmlspitter
+    ```
 
 ## TODOs
 
-- [ ] Fix Docker, see https://github.com/GoogleChrome/puppeteer/blob/master/docs/troubleshooting.md#running-puppeteer-in-docker
-- [ ] Nodemon
+- [ ] Dev readme
+    - [ ] Nodemon
 - [ ] Unit testing and remove jest
-- [ ] Terminate browser on exit of program
 - [ ] Docker Healthcheck
 - [ ] Environment variables
     - Verbosity level
 - [ ] Static binary in Scratch Docker image
 - [ ] Redis cache (compressed string)
 - [ ] Multiple threads, need for mutex for cache?
+
+## Credits
+
+- To [jessfraz](https://github.com/jessfraz) for [chrome.json](chrome.json)
