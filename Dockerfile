@@ -2,10 +2,9 @@ ARG NODE_VERSION=11.13.0-alpine
 
 FROM node:${NODE_VERSION} AS builder
 WORKDIR /htmlspitter
-ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1 \
-    NODE_ENV=production
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1
 COPY package.json package-lock.json ./
-RUN npm install typescript @types/express @types/puppeteer
+RUN npm install --only=dev
 COPY . ./
 # TODO run tests
 RUN npm run build

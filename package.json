@@ -6,8 +6,7 @@
   "scripts": {
     "build": "tsc",
     "start": "node ./build/server.js",
-    "test": "mocha -r ts-node/register test/**/*.spec.ts",
-    "dev": "ts-node server.ts"
+    "test": "mocha -r ts-node/register test/**/*.spec.ts"
   },
   "repository": {
     "type": "git",
