@@ -1,11 +1,11 @@
 # htmlspitter
 
-NodeJS server to spit out HTML from loaded JS using Puppeteer
+Light Docker image with NodeJS server to spit out HTML from loaded JS using Puppeteer
 
 [![htmlspitter](https://github.com/qdm12/htmlspitter/raw/master/title.png)](https://hub.docker.com/r/qmcgaw/htmlspitter)
 
 [![Build Status](https://travis-ci.org/qdm12/htmlspitter.svg?branch=master)](https://travis-ci.org/qdm12/htmlspitter)
-[![Docker Build Status](https://img.shields.io/docker/build/qmcgaw/htmlspitter.svg)](https://hub.docker.com/r/qmcgaw/htmlspitter)
+[![Docker Build Status](https://img.shields.io/docker/cloud/build/qmcgaw/htmlspitter.svg)](https://hub.docker.com/r/qmcgaw/htmlspitter)
 
 [![GitHub last commit](https://img.shields.io/github/last-commit/qdm12/htmlspitter.svg)](https://github.com/qdm12/htmlspitter/issues)
 [![GitHub commit activity](https://img.shields.io/github/commit-activity/y/qdm12/htmlspitter.svg)](https://github.com/qdm12/htmlspitter/issues)
@@ -13,7 +13,7 @@ NodeJS server to spit out HTML from loaded JS using Puppeteer
 
 [![Docker Pulls](https://img.shields.io/docker/pulls/qmcgaw/htmlspitter.svg)](https://hub.docker.com/r/qmcgaw/htmlspitter)
 [![Docker Stars](https://img.shields.io/docker/stars/qmcgaw/htmlspitter.svg)](https://hub.docker.com/r/qmcgaw/htmlspitter)
-[![Docker Automated](https://img.shields.io/docker/automated/qmcgaw/htmlspitter.svg)](https://hub.docker.com/r/qmcgaw/htmlspitter)
+[![Docker Automated](https://img.shields.io/docker/cloud/automated/qmcgaw/htmlspitter.svg)](https://hub.docker.com/r/qmcgaw/htmlspitter)
 
 [![Image size](https://images.microbadger.com/badges/image/qmcgaw/htmlspitter.svg)](https://microbadger.com/images/qmcgaw/htmlspitter)
 [![Image version](https://images.microbadger.com/badges/version/qmcgaw/htmlspitter.svg)](https://microbadger.com/images/qmcgaw/htmlspitter)
@@ -37,10 +37,10 @@ Program is written in Typescript
 The server accepts HTTP requests with two URL parameters:
 - `url` which is the URL to prerender into HTML
 - `wait` which is the load event to wait for before stopping the prerendering. It is optional and can be:
-    - `load`
-    - `domcontentloaded`
-    - `networkidle0` (default)
-    - `networkidle2`
+    - `load` (wait for the `load` event)
+    - `domcontentloaded` (wait for the `DOMContentLoaded` event)
+    - `networkidle0` (**default**, wait until there is no network connections for at least 500 ms)
+    - `networkidle2` (wait until there are less than 3 network connections for at least 500 ms)
 
 An example of a request is `http://localhost:8000/?url=https://github.com/qdm12/htmlspitter`.
 
