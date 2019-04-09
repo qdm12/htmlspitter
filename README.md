@@ -102,20 +102,60 @@ The server also has a built in memory cache holding HTML records obtained during
     wget -qO- http://localhost:8000/?url=https://github.com/qdm12/htmlspitter
     ```
 
-## TODOs
+## Development
 
-- [ ] Dev readme
-    - [ ] Nodemon
-- [ ] Unit testing and remove jest
-- [ ] Graceful shutdown, see [this](https://hackernoon.com/graceful-shutdown-in-nodejs-2f8f59d1c357?gi=3ce24ce63c60)
-- [ ] Docker Healthcheck
-- [ ] Environment variables
+### Setup
+
+1. Make sure you have a recent NodeJS and NPM installed
+1. Clone the repository
+
+    ```sh
+    git clone https://github.com/qdm12/htmlspitter
+    cd htmlspitter
+    ```
+
+1. Install all the dependencies
+
+    ```sh
+    npm i
+    ```
+
+1. You can then:
+    - Run the sever with hot reload
+
+        ```sh
+        npx nodemon
+        ```
+
+    - Run tests
+
+        ```sh
+        npm run tests
+        ```
+
+    - Build Docker
+
+        ```sh
+        docker build -t qmcgaw/htmlspitter .
+        ```
+
+### TODOs
+
+- Graceful shutdown, see [this](https://hackernoon.com/graceful-shutdown-in-nodejs-2f8f59d1c357?gi=3ce24ce63c60)
+- Docker Healthcheck
+- Compression Gzip
+- Unit testing
+- Environment variables
     - Verbosity level
-- [ ] Static binary in Scratch Docker image
-- [ ] Redis cache (compressed string)
-- [ ] Multiple threads, need for mutex for cache?
-- [ ] Add colors, emojis
-- [ ] ARM image with Travis CI
+    - cache size
+    - cache duration
+    - cache
+- Add colors, emojis
+- Redis cache (compressed string)
+- ReactJS GUI
+- Static binary in Scratch Docker image
+- Multiple threads, need for mutex for cache?
+- ARM image with Travis CI
 
 ## Credits
 
