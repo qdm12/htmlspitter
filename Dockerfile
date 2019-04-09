@@ -2,7 +2,8 @@ ARG NODE_VERSION=11.13.0-alpine
 
 FROM node:${NODE_VERSION} AS builder
 WORKDIR /htmlspitter
-ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1 \
+    NODE_ENV=production
 COPY package.json package-lock.json ./
 RUN npm install typescript @types/express @types/puppeteer
 COPY . ./
@@ -14,14 +15,15 @@ WORKDIR /htmlspitter
 EXPOSE 8000
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1 \
     CHROME_BIN=/usr/bin/chromium-browser \
-    CHROME_PATH=/usr/lib/chromium/
+    CHROME_PATH=/usr/lib/chromium/ \
+    NODE_ENV=production
 RUN addgroup -S chromium && \
     adduser -S -g chromium chromium && \
     mkdir -p /home/chromium/Downloads && \
     chown -R chromium:chromium /home/chromium && \
     chown -R chromium:chromium /htmlspitter && \
     apk add --update --progress \
-    chromium harfbuzz nss && \
+    chromium harfbuzz nss freetype ttf-freefont && \
     rm -rf /var/cache/* && \
     mkdir /var/cache/apk
 ENTRYPOINT npm run start
