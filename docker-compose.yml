@@ -5,6 +5,7 @@ services:
     image: qmcgaw/htmlspitter
     container_name: htmlspitter
     network_mode: bridge
+    init: true
     security_opt:
       - seccomp=./chrome.json
     ports:

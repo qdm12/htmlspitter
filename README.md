@@ -59,7 +59,7 @@ The server also has a built in memory cache holding HTML records obtained during
 1. Pull, run and test the container
 
     ```sh
-    docker run -d --name=htmlspitter --security-opt seccomp=$(pwd)/chrome.json -p 8000:8000 qmcgaw/htmlspitter
+    docker run -d --name=htmlspitter --init --security-opt seccomp=$(pwd)/chrome.json -p 8000:8000 qmcgaw/htmlspitter
     # Try a request
     wget -qO- http://localhost:8000/?url=https://github.com/qdm12/htmlspitter
     # Check the logs
