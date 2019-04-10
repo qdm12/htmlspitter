@@ -1,5 +1,5 @@
 import express from 'express';
-import { spitHTML, initEndpointIfNeeded, initBrowser } from './loader';
+import { spitHTML, initEndpointIfNeeded, init } from './loader';
 
 const main = async () => {
     console.log("\n =========================================");
@@ -9,9 +9,9 @@ const main = async () => {
     console.log(" =========================================");
     console.log(" == by github.com/qdm12 - Quentin McGaw ==\n");
     try {
-        await initBrowser();
+        await init();
     } catch (e) {
-        console.error("Cannot initialize chrome endpoint: ", e);
+        console.error("Cannot initialize chromium: \n", e);
         return;
     }
     app.listen(8000, () => console.log("Server listening on port 8000"));
