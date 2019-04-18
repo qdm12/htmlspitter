@@ -103,6 +103,28 @@ An example of a request is `http://localhost:8000/?url=https://github.com/qdm12/
     wget -qO- http://localhost:8000/?url=https://github.com/qdm12/htmlspitter
     ```
 
+## Details
+
+### Program
+
+- A built-in local memory cache holds HTML content obtained the last hour and is limited in the size of characters it contains.
+- A built-in pool of Chromium instances creates and removes Chromium instances according to the server load.
+- Each Chromium instance has a limited number of pages so that if one page crashes Chromium, not all page loads are lost.
+- As Chromium caches content, each instance is destroyed and re-created once it reaches a certain number of page loads.
+
+### Docker
+
+- [chrome.json](chrome.json) is required as Alpine is more restricted than Debian for example. Launching a Chromium process from the NodeJS entrypoint is impossible otherwise. I am opened to suggestions from more advised users on how to find an alternative solution
+- The `--init` flag is added to prevent eventual zombie Chromium processes to exist when the container stops the main NodeJS program.
+- A built in healthcheck is implemented by running `node build/healthcheck.js` against a running instance.
+
+### Performance considerations
+
+- Chromium is written in C++ and multi threaded so it scales well with more CPU cores
+- The NodeJS program should not be the bottleneck as all the work is done by Chromium
+- The bottleneck is the limit of pages per Chromium instance, and heavily depends on RAM
+- You can scale up by having multiple machines running the program, behind a load balancer
+
 ## Development
 
 ### Setup
