@@ -25,12 +25,13 @@ export class Browser {
         maxPages:number,
         maxHits:number,
         maxAgeUnused:number,
+        maxQueueSize:number,
     ) {
         debugLog.browser("creating");
         this.browser = null;
         // need to await browser.launched
         this.launched = this.launch(executablePath);
-        this.queue = new Queue();
+        this.queue = new Queue(maxQueueSize);
         this.params = {
             maxPages,
             maxHits,

@@ -24,6 +24,7 @@ const main = async () => {
         params.maxHits,
         params.maxAgeUnused,
         params.executablePath,
+        params.maxQueueSize,
     );
     debugLog.main("Creating cache");
     cache = new CacheHTML(params.maxCacheSize);
