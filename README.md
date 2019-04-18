@@ -143,23 +143,17 @@ An example of a request is `http://localhost:8000/?url=https://github.com/qdm12/
 
 ### TODOs
 
+- Record bad urls crashing Chromium and return an error message
+- Limit cache in terms of MB
+- Limit Chromium instances in terms of RAM
+- Compression Gzip
 - Sync same URL with Redis (not getting twice the same URL)
 - Sync Cache with Postgresql or Redis depending on size
-- Limit cache in terms of MB
-- Limit Chromium instances in terms of ram
 - Limit data size in Postgresql according to time created
 - Unit testing
-- Environment variables
-    - verbosity level
-    - cache size
-    - cache duration
-    - queue length
-- Compression Gzip
-- Add colors, emojis
 - ReactJS GUI
 - Static binary in Scratch Docker image
-- Multiple threads, need for mutex for cache?
-- ARM image with Travis CI 
+- ARM image with Travis CI
 
 ## Credits
 
