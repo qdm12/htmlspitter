@@ -1,6 +1,7 @@
 import puppeteer from 'puppeteer';
 import { CacheHTML } from './cache';
 import { Pool } from './pool';
+import { debugLog } from './logging';
 
 /**
  * 
@@ -14,6 +15,7 @@ export const spitHTML = async (
     pool:Pool,
     cache:CacheHTML) => {
     if (cache.hasValue(url)) {
+        debugLog.loader("cache has HTML for URL "+url)
         return cache.getValueHTML(url);
     }
     // TODO check url format
@@ -30,15 +32,18 @@ export const spitHTML = async (
         }
     });
     // Load and wait for the page
+    debugLog.loader("going to page "+url);
     await page.goto(url, {
         waitUntil
     });
     const t0 = cache.reduceSize();
     const t1 = cache.cleanOld();
+    debugLog.loader("awaiting for HTML content");
     const html = await page.content();
     page.close(); // async but no need to wait
     await t0, t1;
     cache.setValue(url, html); // async but no need to wait
+    debugLog.loader("spitting HTML of URL "+url);
     return html;
 }
 
@@ -74,6 +79,7 @@ const requestIsAllowed = (req:puppeteer.Request) => {
         "fetch"
     ];
     const url = req.url();
+    debugLog.loader("caught request URL "+url);
     if (!whitelist.includes(req.resourceType())) {
         return false;
     }

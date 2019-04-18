@@ -17,8 +17,11 @@ export const logger = createLogger({
 });
 
 export const debugLog = {
-  main: require('debug')('htmlspitter:main'),
-  browser: require('debug')('htmlspitter:browser'),
-  server: require('debug')('htmlspitter:server'),
-  pool: require('debug')('htmlspitter:pool'),
+    main: require('debug')('htmlspitter:main'),
+    browser: require('debug')('htmlspitter:browser'),
+    server: require('debug')('htmlspitter:server'),
+    pool: require('debug')('htmlspitter:pool'),
+    params: require('debug')('htmlspitter:params'),
+    cache: require('debug')('htmlspitter:cache'),
+    loader: require('debug')('htmlspitter:loader'),
 }

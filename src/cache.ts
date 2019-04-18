@@ -1,3 +1,5 @@
+import { debugLog } from "./logging";
+
 class Value {
     url:string;
     html:string;
@@ -68,6 +70,7 @@ export class CacheHTML {
             }
         );
         for (const url of expiredKeys.values()) {
+            debugLog.cache("cleaning old URL "+url);
             this.deleteValue(url);
         }
     }
@@ -79,6 +82,7 @@ export class CacheHTML {
         let i = 0;
         while (this.size > this.maxSize) {
             const url = sortedKeys[i];
+            debugLog.cache("reducing size removing URL "+url);
             this.deleteValue(url);
             i++;
             if (i > sortedKeys.length) {

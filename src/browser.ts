@@ -26,7 +26,7 @@ export class Browser {
         maxHits:number,
         maxAgeUnused:number,
     ) {
-        debugLog.browser("creating browser");
+        debugLog.browser("creating");
         this.browser = null;
         // need to await browser.launched
         this.launched = this.launch(executablePath);
@@ -65,11 +65,12 @@ export class Browser {
                 "--safebrowsing-disable-auto-update"
             ]
         });
+        debugLog.browser("created");
     }
     isOverHitLimit() {
         const result = this.stats.hits > this.params.maxHits;
         if (result) {
-            debugLog.browser("browser is over hit limit");
+            debugLog.browser("over hit limit");
         }
         return result;
     }
@@ -84,7 +85,11 @@ export class Browser {
     }
     // Set a periodic function to check on renewMe()
     renewMe() {
-        return this.isOverHitLimit() && this.stats.pages === 0;
+        const result = this.isOverHitLimit() && this.stats.pages === 0;
+        if (result) {
+            debugLog.browser("renew me");
+        }
+        return result;
     }
     pageAvailable() {
         return this.stats.pages < this.params.maxPages;
@@ -102,18 +107,22 @@ export class Browser {
         this.stats.lastUsedAt = new Date();
         const page = await this.browser.newPage();
         this.stats.pages++;
+        debugLog.browser("created page");
         return page;
     }
     async closePage(page:puppeteer.Page) {
         debugLog.browser("closing page");
         await page.close();
+        debugLog.browser("closed page");
         this.stats.pages--;
     }
     async close() {
         debugLog.browser("closing browser");
         if (this.browser === null) {
+            debugLog.browser("browser is already null");
             return;
         }
         await this.browser.close();
+        debugLog.browser("closed browser");
     }
 }

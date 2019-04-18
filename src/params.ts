@@ -1,3 +1,5 @@
+import { debugLog } from "./logging";
+
 export class Params {
     port:number;
     executablePath: string;
@@ -7,6 +9,7 @@ export class Params {
     maxBrowsers:number;
     maxCacheSize:number;
     constructor(env:NodeJS.ProcessEnv) {
+        debugLog.params("reading parameters");
         this.port = Number(env.PORT) || 8000;
         this.executablePath = env.CHROME_BIN || "Puppeteer-bundled";
         this.maxPages = Number(env.MAXPAGES) || 10;
