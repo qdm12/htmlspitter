@@ -80,7 +80,7 @@ export class Browser {
         const lastUsed = this.stats.lastUsedAt.valueOf()*1000;
         const result = t - lastUsed > this.params.maxAgeUnused;
         if (result) {
-            debugLog.browser("browser is unused");
+            debugLog.browser("unused");
         }
         return result;
     }
@@ -101,7 +101,7 @@ export class Browser {
             throw Error("cannot create page for null browser");
         }
         if (this.isOverHitLimit()) {
-            throw Error("browser has reached its hit limit of pages: "+this.params.maxHits+" pages");
+            throw Error("browser has reached its hit limit of pages");
         }
         // Browser local queue to create new pages (FIFO)
         const id = this.queue.push(); // raise an error if maximum is reached

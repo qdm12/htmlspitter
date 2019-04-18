@@ -12,13 +12,13 @@ export class Server {
         this.setupRoutes(this.app);
         this.server = this.app.listen(
             port,
-            () => logger.log("info", "Server listening on port "+port),
+            () => logger.info("server listening on port "+port),
         );
     }
     setupRoutes(app:Express) {
         debugLog.server("setting up server routes");
         app.get('/', async (req, res, _) => {
-            debugLog.server("received GET / request: "+req.url);
+            logger.info("received HTTP GET: " + req.url);
             const url = req.query["url"];
             if (url === undefined) {
                 return res.status(403).send({
@@ -32,7 +32,6 @@ export class Server {
                     "html":html
                 });
             } catch(e) {
-                throw e;
                 logger.error(String(e));
                 return res.status(403).send({
                     "error": String(e)
