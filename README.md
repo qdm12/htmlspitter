@@ -1,8 +1,8 @@
 # HTMLSpitter
 
-**Still in development and not production ready !**
+**Not production ready**
 
-Light Docker image with NodeJS server to spit out HTML from loaded JS using Puppeteer and Chromium
+Lightweight Docker image with NodeJS server to spit out HTML from loaded JS using Puppeteer and Chromium
 
 [![htmlspitter](https://github.com/qdm12/htmlspitter/raw/master/title.png)](https://hub.docker.com/r/qmcgaw/htmlspitter)
 
@@ -36,7 +36,7 @@ Main program is written in Typescript and NodeJS
 
 ## Description
 
-Runs a Node server accepting HTTP requests with two URL parameters:
+Runs a NodeJS Express server accepting HTTP requests with two URL parameters:
 - `url` which is the URL to prerender into HTML
 - `wait` which is the load event to wait for before stopping the prerendering. It is **optional** and can be:
     - `load` (wait for the `load` event)
@@ -68,7 +68,7 @@ An example of a request is `http://localhost:8000/?url=https://github.com/qdm12/
 
     You can also use [docker-compose.yml](docker-compose.yml).
 
-### Using local NodeJS
+### Using NodeJS
 
 1. Ensure you have NodeJS, NPM and Git installed
 
@@ -163,7 +163,7 @@ An example of a request is `http://localhost:8000/?url=https://github.com/qdm12/
 
 ## Credits
 
-- To [jessfraz](https://github.com/jessfraz) for [chrome.json](chrome.json)
+- Credits to [jessfraz](https://github.com/jessfraz) for [chrome.json](chrome.json)
 
 ## License
 
