@@ -104,7 +104,12 @@ export class Browser {
             throw Error("browser has reached its hit limit of pages: "+this.params.maxHits+" pages");
         }
         // Browser local queue to create new pages (FIFO)
-        await this.queue.wait(this.pageAvailable, 100); // TODO PB HERE
+        const id = this.queue.push(); // raise an error if maximum is reached
+        while (!(this.pageAvailable() && this.queue.isFirst(id))) {
+            debugLog.browser("waiting to create page");
+            await sleepAsync(100);
+        }
+        this.queue.shift();
         this.stats.lastUsedAt = new Date();
         const page = await this.browser.newPage();
         this.stats.pages++;
@@ -126,4 +131,10 @@ export class Browser {
         await this.browser.close();
         debugLog.browser("closed browser");
     }
+}
+
+const sleepAsync = async (ms:number) => {
+    return new Promise(resolve=>{
+        setTimeout(resolve,ms)
+    });
 }

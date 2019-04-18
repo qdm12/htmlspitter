@@ -36,17 +36,4 @@ export class Queue {
     isFirst(id:number) {
         return id === this.ids[0];
     }
-    // adds to queue and waits for first turn asynchronously
-    async wait(isReady:()=>boolean, periodms:number) {
-        const id = this.push();
-        while (!(isReady() && this.isFirst(id))) {
-            await this.sleep(periodms);
-        }
-        this.shift();
-    }
-    sleep(ms:number) {
-        return new Promise(resolve=>{
-            setTimeout(resolve,ms)
-        });
-    }
 }
