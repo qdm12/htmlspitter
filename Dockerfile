@@ -15,7 +15,8 @@ EXPOSE 8000
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1 \
     CHROME_BIN=/usr/bin/chromium-browser \
     CHROME_PATH=/usr/lib/chromium/ \
-    NODE_ENV=production
+    NODE_ENV=production \
+    DEBUG=
 RUN addgroup -S chromium && \
     adduser -S -g chromium chromium && \
     mkdir -p /home/chromium/Downloads && \
@@ -25,7 +26,8 @@ RUN addgroup -S chromium && \
     chromium harfbuzz nss freetype ttf-freefont && \
     rm -rf /var/cache/* && \
     mkdir /var/cache/apk
-ENTRYPOINT npm run start
+HEALTHCHECK --interval=10s --timeout=3s --start-period=5s --retries=1 CMD [ "node", "./build/healthcheck.js" ]
+ENTRYPOINT [ "npm", "run", "start" ]
 COPY package.json package-lock.json ./
 RUN npm install --only=prod
 COPY --from=builder --chown=chromium:chromium /htmlspitter/build /htmlspitter/build

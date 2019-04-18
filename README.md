@@ -1,6 +1,8 @@
-# htmlspitter
+# HTMLSpitter
 
-Light Docker image with NodeJS server to spit out HTML from loaded JS using Puppeteer
+**Still in development and not production ready !**
+
+Light Docker image with NodeJS server to spit out HTML from loaded JS using Puppeteer and Chromium
 
 [![htmlspitter](https://github.com/qdm12/htmlspitter/raw/master/title.png)](https://hub.docker.com/r/qmcgaw/htmlspitter)
 
@@ -26,17 +28,17 @@ Light Docker image with NodeJS server to spit out HTML from loaded JS using Pupp
 
 Docker image is based on:
 
-- [NodeJS Alpine](https://hub.docker.com/_/node/)
+- [node:alpine](https://hub.docker.com/_/node/)
 - [Chromium 72.0.3626.121-r0](https://pkgs.alpinelinux.org/package/v3.9/community/x86_64/chromium) with its dependencies `harfbuzz` and `nss`
 - [Puppeteer 1.14](https://github.com/GoogleChrome/puppeteer/releases/tag/v1.14.0)
 
-Program is written in Typescript
+Main program is written in Typescript and NodeJS
 
 ## Description
 
-The server accepts HTTP requests with two URL parameters:
+Runs a Node server accepting HTTP requests with two URL parameters:
 - `url` which is the URL to prerender into HTML
-- `wait` which is the load event to wait for before stopping the prerendering. It is optional and can be:
+- `wait` which is the load event to wait for before stopping the prerendering. It is **optional** and can be:
     - `load` (wait for the `load` event)
     - `domcontentloaded` (wait for the `DOMContentLoaded` event)
     - `networkidle0` (**default**, wait until there is no network connections for at least 500 ms)
@@ -44,9 +46,7 @@ The server accepts HTTP requests with two URL parameters:
 
 An example of a request is `http://localhost:8000/?url=https://github.com/qdm12/htmlspitter`.
 
-The server also has a built in memory cache holding HTML records obtained during the last hour.
-
-## Run the server
+### How to use
 
 ### Using Docker
 
@@ -70,7 +70,14 @@ The server also has a built in memory cache holding HTML records obtained during
 
 ### Using local NodeJS
 
-1. Make sure you have a recent NodeJS and NPM installed
+1. Ensure you have NodeJS, NPM and Git installed
+
+    ```sh
+    node -v
+    npm -v
+    git -v
+    ```
+
 1. Clone the repository
 
     ```sh
@@ -84,13 +91,7 @@ The server also has a built in memory cache holding HTML records obtained during
     npm i
     ```
 
-1. Transcompile the Typescript code to Javascript
-
-    ```sh
-    npm run build
-    ```
-
-1. Launch the server
+1. Transcompile the Typescript code to Javascript and run `build/main.js`
 
     ```sh
     npm run start
@@ -106,7 +107,14 @@ The server also has a built in memory cache holding HTML records obtained during
 
 ### Setup
 
-1. Make sure you have a recent NodeJS and NPM installed
+1. Ensure you have NodeJS, NPM and Git installed
+
+    ```sh
+    node -v
+    npm -v
+    git -v
+    ```
+
 1. Clone the repository
 
     ```sh
@@ -121,16 +129,10 @@ The server also has a built in memory cache holding HTML records obtained during
     ```
 
 1. You can then:
-    - Run the sever with hot reload
+    - Run the sever with hot reload (performs `npm run start` on each .ts change)
 
         ```sh
         npx nodemon
-        ```
-
-    - Run tests
-
-        ```sh
-        npm run tests
         ```
 
     - Build Docker
@@ -141,21 +143,23 @@ The server also has a built in memory cache holding HTML records obtained during
 
 ### TODOs
 
-- Graceful shutdown, see [this](https://hackernoon.com/graceful-shutdown-in-nodejs-2f8f59d1c357?gi=3ce24ce63c60)
-- Docker Healthcheck
-- Compression Gzip
+- Sync same URL with Redis (not getting twice the same URL)
+- Sync Cache with Postgresql or Redis depending on size
+- Limit cache in terms of MB
+- Limit Chromium instances in terms of ram
+- Limit data size in Postgresql according to time created
 - Unit testing
 - Environment variables
-    - Verbosity level
+    - verbosity level
     - cache size
     - cache duration
-    - cache
+    - queue length
+- Compression Gzip
 - Add colors, emojis
-- Redis cache (compressed string)
 - ReactJS GUI
 - Static binary in Scratch Docker image
 - Multiple threads, need for mutex for cache?
-- ARM image with Travis CI
+- ARM image with Travis CI 
 
 ## Credits
 
