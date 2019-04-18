@@ -8,6 +8,7 @@ export class Params {
     maxAgeUnused:number;
     maxBrowsers:number;
     maxCacheSize:number;
+    maxQueueSize:number;
     constructor(env:NodeJS.ProcessEnv) {
         debugLog.params("reading parameters");
         this.port = Number(env.PORT) || 8000;
@@ -17,6 +18,7 @@ export class Params {
         this.maxAgeUnused = Number(env.MAXAGEUNUSED) || 60;
         this.maxBrowsers = Number(env.MAXBROWSERS) || 10;
         this.maxCacheSize = Number(env.MAXCACHESIZE) || 10000;
+        this.maxQueueSize = Number(env.MAXQUEUESIZE) || 100;
     }
     toString() {
         return JSON.stringify(this);

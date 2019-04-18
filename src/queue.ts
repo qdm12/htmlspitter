@@ -1,12 +1,17 @@
 export class Queue {
     ids:number[];
     idsInQueue:Set<number>;
-    constructor() {
+    maxSize:number;
+    constructor(maxSize:number) {
+        this.maxSize = maxSize;
         this.ids = [];
         this.idsInQueue = new Set();
     }
     // Adds an element to the back of the queue
     push() {
+        if (this.ids.length === this.maxSize) {
+            throw Error("queue reached its maximum size")
+        }
         const id = this.getNextID();
         this.ids.push(id);
         this.idsInQueue.add(id);

@@ -7,6 +7,7 @@ interface paramsType {
     maxHits:number,
     maxAgeUnused:number,
     executablePath:string,
+    maxQueueSize:number,
 }
 
 // Pool of browsers
@@ -21,6 +22,7 @@ export class Pool {
         maxHits:number,
         maxAgeUnused:number,
         executablePath:string,
+        maxQueueSize:number,
         ) {
         this.pool = new Map<number,Browser>();
         this.params = {
@@ -29,6 +31,7 @@ export class Pool {
             maxHits,
             maxAgeUnused,
             executablePath,
+            maxQueueSize,
         };
         this.periodicTimer = this.periodicChecks();
     }
@@ -74,6 +77,7 @@ export class Pool {
             this.params.maxPages,
             this.params.maxHits,
             this.params.maxAgeUnused,
+            this.params.maxQueueSize,
         );
         await browser.launched;
         this.pool.set(id, browser);
