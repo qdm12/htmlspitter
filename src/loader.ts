@@ -3,6 +3,9 @@ import { CacheHTML } from './cache';
 import { Pool } from './pool';
 import { debugLog } from './logging';
 
+const badURLs = new Set<string>();
+const badURLsConfirmed = new Set<string>();
+
 /**
  * 
  * @param url URL to prerender
@@ -14,6 +17,9 @@ export const spitHTML = async (
     wait:string|undefined,
     pool:Pool,
     cache:CacheHTML) => {
+    if (badURLsConfirmed.has(url)) {
+        throw Error(url+" is a confirmed bad URL");
+    }
     if (cache.hasValue(url)) {
         debugLog.loader("cache has HTML for URL "+url)
         return cache.getValueHTML(url);
@@ -33,19 +39,41 @@ export const spitHTML = async (
     });
     // Load and wait for the page
     debugLog.loader("going to page "+url);
-    await page.goto(url, {
-        waitUntil
-    });
+    try {
+        await page.goto(url, {
+            waitUntil
+        });
+    } catch(e) {
+        recordBadURL(url);
+        throw e;
+    }
     const t0 = cache.reduceSize();
     const t1 = cache.cleanOld();
     debugLog.loader("awaiting for HTML content");
-    const html = await page.content();
+    let html:string;
+    try {
+        html = await page.content();
+    } catch(e) {
+        recordBadURL(url);
+        throw e;
+    }
     page.close(); // async but no need to wait
     await t0, t1;
     cache.setValue(url, html); // async but no need to wait
     debugLog.loader("spitting HTML of URL "+url);
     return html;
 }
+
+const recordBadURL = (url:string) => {
+    if (badURLsConfirmed.has(url)) {
+        return;
+    } else if (badURLs.has(url)) {
+        badURLs.delete(url);
+        badURLsConfirmed.add(url);
+    } else {
+        badURLs.add(url);
+    }
+};
 
 const buildWaitUntil = (wait:string|undefined) => {
     let waitUntil:puppeteer.LoadEvent;

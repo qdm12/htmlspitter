@@ -165,7 +165,6 @@ An example of a request is `http://localhost:8000/?url=https://github.com/qdm12/
 
 ### TODOs
 
-- Record bad urls crashing Chromium and return an error message
 - Limit cache in terms of MB
 - Limit Chromium instances in terms of RAM
 - Compression Gzip
