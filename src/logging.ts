@@ -1,20 +1,25 @@
-import {createLogger, format, transports} from "winston";
+import {createLogger, format, transports, Logger} from "winston";
 import { TransformFunction, TransformableInfo } from "logform";
 
 const MESSAGE = Symbol.for('message');
 
 const jsonFormatter:TransformFunction = (logEntry:any) => {
-  const base = { timestamp: new Date() };
-  const obj = Object.assign(base, logEntry)
-  logEntry[MESSAGE] = JSON.stringify(obj);
-  return logEntry;
+    const base = { timestamp: new Date() };
+    const obj = Object.assign(base, logEntry)
+    logEntry[MESSAGE] = JSON.stringify(obj);
+    return logEntry;
 }
 
-export const logger = createLogger({
-  level: "info",
-  format: format(jsonFormatter)(),
-  transports: new transports.Console(),
-});
+export let logger:Logger;
+
+export const initLogger = (json:boolean) => {
+    const _format:any = json ? format(jsonFormatter)() : undefined;
+    logger = createLogger({
+        level: "info",
+        format: _format,
+        transports: new transports.Console(),
+    });
+}
 
 export const debugLog = {
     main: require('debug')('htmlspitter:main'),

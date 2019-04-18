@@ -1,5 +1,5 @@
 import { Params } from './params';
-import { logger, debugLog } from './logging';
+import { debugLog, initLogger, logger } from './logging';
 import { Pool } from './pool';
 import { Server } from './server';
 import { CacheHTML } from './cache';
@@ -8,15 +8,18 @@ export let cache:CacheHTML;
 export let pool:Pool;
 
 const main = async () => {
-    console.log("\n =========================================");
-    console.log(" =========================================");
-    console.log(" ============== HTMLSpitter ==============");
-    console.log(" =========================================");
-    console.log(" =========================================");
-    console.log(" == by github.com/qdm12 - Quentin McGaw ==\n");
-    debugLog.main("Starting");
     const params = new Params(process.env);
-    logger.log("info", params.toString());
+    if (params.log === "normal") {
+        console.log("\n =========================================");
+        console.log(" =========================================");
+        console.log(" ============== HTMLSpitter ==============");
+        console.log(" =========================================");
+        console.log(" =========================================");
+        console.log(" == by github.com/qdm12 - Quentin McGaw ==\n");
+    }
+    debugLog.main("Starting");
+    initLogger(params.log === "json");
+    logger.info(params.toString());
     debugLog.main("Creating pool of browsers");
     pool = new Pool(
         params.maxBrowsers,
