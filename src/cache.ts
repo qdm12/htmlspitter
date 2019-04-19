@@ -33,13 +33,13 @@ export class CacheHTML {
         return this.getValue(url).html;
     }
     getValueTimestamp(url:string) {
-        return this.getValue(url).created.valueOf() * 1000;
+        return this.getValue(url).created.valueOf()/1000;
     }
     getValueSize(url:string) {
         return this.getValue(url).size;
     }
     getValueAge(url:string) { // seconds
-        return this.getValueTimestamp(url) - new Date().valueOf()*1000;
+        return this.getValueTimestamp(url) - new Date().valueOf()/1000;
     }
     setValue(url:string, html:string) {
         const value = new Value(url, html);

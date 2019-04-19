@@ -76,8 +76,8 @@ export class Browser {
         return result;
     }
     isUnused() {
-        const t = new Date().valueOf()*1000;
-        const lastUsed = this.stats.lastUsedAt.valueOf()*1000;
+        const t = new Date().valueOf()/1000;
+        const lastUsed = this.stats.lastUsedAt.valueOf()/1000;
         const result = t - lastUsed > this.params.maxAgeUnused;
         if (result) {
             debugLog.browser("unused");
