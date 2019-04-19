@@ -103,6 +103,20 @@ An example of a request is `http://localhost:8000/?url=https://github.com/qdm12/
     wget -qO- http://localhost:8000/?url=https://github.com/qdm12/htmlspitter
     ```
 
+### Environment variables
+
+| Environment variable | Default | Possible values | Description |
+| --- | --- | --- | --- |
+| `PORT` | `8000` | `1024 to 65535` | Internal HTTP server listening port |
+| `CHROME_BIN` | `Puppeteer-bundled` | any path or `Puppeteer-bundled` | Path to Chromium binary |
+| `MAXPAGES` | `10` | number `> 0` | Max number of pages per Chromium instance at any time |
+| `MAXHITS` | `300` | number `> 0` | Max number of pages opened per Chromium instance during its lifetime (before relaunch) |
+| `MAXAGEUNUSED` | `60` | number `> 0` | Max age in seconds of inactivity before the browser is closed |
+| `MAXBROWSERS` | `10` | number `> 0` | Max number of Chromium instances at any time |
+| `MAXCACHESIZE` | `10000000` | number `> 0` | Max number of characters stored in the cache |
+| `MAXQUEUESIZE` | `100` | number `> 0` | Max size of queue of pages per Chromium instance |
+| `LOG` | `normal` | `normal` or `json` | Format to use to print logs |
+
 ## Details
 
 ### Program
