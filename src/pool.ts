@@ -118,8 +118,6 @@ export class Pool {
     }
     // Gets the first browser which has not reached the 
     // maximum number of pages yet.
-    // TODO create browser if needed
-    // TODO remove expired and unused browser with timeout after creation
     async getBrowser() {
         debugLog.pool("getting a browser");
         for (const browser of this.pool.values()) {
