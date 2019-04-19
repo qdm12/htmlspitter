@@ -107,8 +107,8 @@ const requestIsAllowed = (req:puppeteer.Request) => {
         "fetch"
     ];
     const url = req.url();
-    debugLog.loader("caught request URL "+url);
     if (!whitelist.includes(req.resourceType())) {
+        debugLog.loader("unallowed resource type for resource URL: "+url);
         return false;
     }
     const blacklist = [
@@ -117,15 +117,12 @@ const requestIsAllowed = (req:puppeteer.Request) => {
         "gs.js",
         "analytics.js"
     ];
-    let blacklisted = false;
-    blacklist.forEach(s => {
-        const arr = url.match(s);
+    for(const blacklisted of blacklist) {
+        const arr = url.match(blacklisted);
         if (arr != null && arr.length > 0) {
-            blacklisted = true
+            debugLog.loader("blacklisted resource URL: "+url);
+            return false;
         }
-    });
-    if (blacklisted) {
-        return false;
     }
     return true;
 }
