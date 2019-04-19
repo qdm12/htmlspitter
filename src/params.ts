@@ -18,7 +18,7 @@ export class Params {
         this.maxHits = Number(env.MAXHITS) || 300;
         this.maxAgeUnused = Number(env.MAXAGEUNUSED) || 60;
         this.maxBrowsers = Number(env.MAXBROWSERS) || 10;
-        this.maxCacheSize = Number(env.MAXCACHESIZE) || 10000;
+        this.maxCacheSize = Number(env.MAXCACHESIZE) || 10000000;
         this.maxQueueSize = Number(env.MAXQUEUESIZE) || 100;
         this.log = env.LOG || "normal";
     }
