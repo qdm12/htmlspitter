@@ -4,7 +4,7 @@ FROM node:${NODE_VERSION} AS builder
 WORKDIR /htmlspitter
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1
 COPY package.json package-lock.json ./
-RUN npm install --only=dev
+RUN npm install
 COPY . ./
 # TODO run tests
 RUN npm run build
@@ -15,8 +15,7 @@ EXPOSE 8000
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1 \
     CHROME_BIN=/usr/bin/chromium-browser \
     CHROME_PATH=/usr/lib/chromium/ \
-    NODE_ENV=production \
-    DEBUG=
+    NODE_ENV=production
 RUN addgroup -S chromium && \
     adduser -S -g chromium chromium && \
     mkdir -p /home/chromium/Downloads && \
