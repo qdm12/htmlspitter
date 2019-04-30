@@ -1,22 +1,19 @@
 import {createLogger, format, transports, Logger} from "winston";
-import { TransformFunction, TransformableInfo } from "logform";
-
-const MESSAGE = Symbol.for('message');
-
-const jsonFormatter:TransformFunction = (logEntry:any) => {
-    const base = { timestamp: new Date() };
-    const obj = Object.assign(base, logEntry)
-    logEntry[MESSAGE] = JSON.stringify(obj);
-    return logEntry;
-}
+import { Format } from "logform";
 
 export let logger:Logger;
 
 export const initLogger = (json:boolean) => {
-    const _format:any = json ? format(jsonFormatter)() : undefined;
+    const f:Format|undefined = json ? format.combine(
+        format.timestamp(),
+        format.json()
+    ) : format.combine(
+        format.colorize(),
+        format.cli()
+    );
     logger = createLogger({
         level: "info",
-        format: _format,
+        format: f,
         transports: new transports.Console(),
     });
 }
