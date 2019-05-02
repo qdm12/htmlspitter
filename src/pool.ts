@@ -2,29 +2,29 @@ import { Browser } from './browser';
 import { debugLog } from './logging';
 
 interface paramsType {
-    maxBrowsers:number,
-    maxPages:number,
-    maxHits:number,
-    maxAgeUnused:number,
-    executablePath:string,
-    maxQueueSize:number,
+    maxBrowsers: number,
+    maxPages: number,
+    maxHits: number,
+    maxAgeUnused: number,
+    executablePath: string,
+    maxQueueSize: number,
 }
 
 // Pool of browsers
 export class Pool {
     // id, browser
-    pool:Map<number,Browser>;
-    params:paramsType;
-    periodicTimer:NodeJS.Timeout;
+    pool: Map<number, Browser>;
+    params: paramsType;
+    periodicTimer: NodeJS.Timeout;
     constructor(
-        maxBrowsers:number,
-        maxPages:number,
-        maxHits:number,
-        maxAgeUnused:number,
-        executablePath:string,
-        maxQueueSize:number,
-        ) {
-        this.pool = new Map<number,Browser>();
+        maxBrowsers: number,
+        maxPages: number,
+        maxHits: number,
+        maxAgeUnused: number,
+        executablePath: string,
+        maxQueueSize: number,
+    ) {
+        this.pool = new Map<number, Browser>();
         this.params = {
             maxBrowsers,
             maxPages,
@@ -57,7 +57,7 @@ export class Pool {
             throw Error("cannot add a browser");
         }
         let nextID = 0;
-        while(nextID < Math.max(this.pool.size, 1)) {
+        while (nextID < Math.max(this.pool.size, 1)) {
             if (!this.pool.has(nextID)) {
                 return nextID;
             }
@@ -69,7 +69,7 @@ export class Pool {
     async addBrowser() {
         debugLog.pool("adding browser");
         if (!this.canAddBrowser()) {
-            throw Error("reached maximum number of browsers: "+this.params.maxBrowsers);
+            throw Error("reached maximum number of browsers: " + this.params.maxBrowsers);
         }
         const id = this.newBrowserID();
         const browser = new Browser(
@@ -81,15 +81,15 @@ export class Pool {
         );
         await browser.launched;
         this.pool.set(id, browser);
-        debugLog.pool("added browser with ID "+id);
+        debugLog.pool("added browser with ID " + id);
         const test = this.pool.get(id);
         return browser;
     }
-    async closeBrowser(id:number) {
-        debugLog.pool("closing browser with ID "+id);
+    async closeBrowser(id: number) {
+        debugLog.pool("closing browser with ID " + id);
         const browser = this.pool.get(id);
         if (browser === undefined) {
-            throw Error("browser for id "+id+" does not exist");
+            throw Error("browser for id " + id + " does not exist");
         }
         await browser.close();
         this.pool.delete(id);
@@ -97,7 +97,7 @@ export class Pool {
     async close() {
         debugLog.pool("closing pool");
         clearTimeout(this.periodicTimer);
-        for(const id of this.pool.keys()) {
+        for (const id of this.pool.keys()) {
             await this.closeBrowser(id);
         }
     }
@@ -111,9 +111,9 @@ export class Pool {
         });
         const browser = this.pool.get(minID);
         if (browser === undefined) {
-            throw Error("browser for id "+minID+" does not exist");
+            throw Error("browser for id " + minID + " does not exist");
         }
-        debugLog.pool("got browser with least pages, ID "+minID+", pages: "+browser.stats.pages);
+        debugLog.pool("got browser with least pages, ID " + minID + ", pages: " + browser.stats.pages);
         return browser;
     }
     // Gets the first browser which has not reached the 
@@ -133,8 +133,8 @@ export class Pool {
         // Max number of browsers so enqueue to the least busy browser
         return this.getBrowserLeastPages();
     }
-    async renewBrowser(id:number) {
-        debugLog.pool("renewing browser with ID "+id);
+    async renewBrowser(id: number) {
+        debugLog.pool("renewing browser with ID " + id);
         await this.closeBrowser(id);
         await this.addBrowser();
     }

@@ -1,10 +1,10 @@
-import {createLogger, format, transports, Logger} from "winston";
+import { createLogger, format, transports, Logger } from "winston";
 import { Format } from "logform";
 
-export let logger:Logger;
+export let logger: Logger;
 
-export const initLogger = (json:boolean) => {
-    const f:Format|undefined = json ? format.combine(
+export const initLogger = (json: boolean) => {
+    const f: Format | undefined = json ? format.combine(
         format.timestamp(),
         format.json()
     ) : format.combine(

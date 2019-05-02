@@ -4,8 +4,8 @@ import { Pool } from './pool';
 import { Server } from './server';
 import { CacheHTML } from './cache';
 
-export let cache:CacheHTML;
-export let pool:Pool;
+export let cache: CacheHTML;
+export let pool: Pool;
 
 const main = async () => {
     const params = new Params(process.env);

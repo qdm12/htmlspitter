@@ -13,15 +13,15 @@ const badURLsConfirmed = new Set<string>();
  * @returns string of loaded html
  */
 export const spitHTML = async (
-    url:string,
-    wait:string|undefined,
-    pool:Pool,
-    cache:CacheHTML) => {
+    url: string,
+    wait: string | undefined,
+    pool: Pool,
+    cache: CacheHTML) => {
     if (badURLsConfirmed.has(url)) {
-        throw Error(url+" is a confirmed bad URL");
+        throw Error(url + " is a confirmed bad URL");
     }
     if (cache.hasValue(url)) {
-        debugLog.loader("cache has HTML for URL "+url)
+        debugLog.loader("cache has HTML for URL " + url)
         return cache.getValueHTML(url);
     }
     // TODO check url format
@@ -38,33 +38,33 @@ export const spitHTML = async (
         }
     });
     // Load and wait for the page
-    debugLog.loader("going to page "+url);
+    debugLog.loader("going to page " + url);
     try {
         await page.goto(url, {
             waitUntil
         });
-    } catch(e) {
+    } catch (e) {
         recordBadURL(url);
         throw e;
     }
     const t0 = cache.reduceSize();
     const t1 = cache.cleanOld();
     debugLog.loader("awaiting for HTML content");
-    let html:string;
+    let html: string;
     try {
         html = await page.content();
-    } catch(e) {
+    } catch (e) {
         recordBadURL(url);
         throw e;
     }
     page.close(); // async but no need to wait
     await t0, t1;
     cache.setValue(url, html); // async but no need to wait
-    debugLog.loader("spitting HTML of URL "+url);
+    debugLog.loader("spitting HTML of URL " + url);
     return html;
 }
 
-const recordBadURL = (url:string) => {
+const recordBadURL = (url: string) => {
     if (badURLsConfirmed.has(url)) {
         return;
     } else if (badURLs.has(url)) {
@@ -75,8 +75,8 @@ const recordBadURL = (url:string) => {
     }
 };
 
-const buildWaitUntil = (wait:string|undefined) => {
-    let waitUntil:puppeteer.LoadEvent;
+const buildWaitUntil = (wait: string | undefined) => {
+    let waitUntil: puppeteer.LoadEvent;
     switch (wait) {
         case "load":
             waitUntil = "load";
@@ -99,7 +99,7 @@ const buildWaitUntil = (wait:string|undefined) => {
     return waitUntil;
 }
 
-const requestIsAllowed = (req:puppeteer.Request) => {
+const requestIsAllowed = (req: puppeteer.Request) => {
     const whitelist = [
         "document",
         "script",
@@ -108,7 +108,7 @@ const requestIsAllowed = (req:puppeteer.Request) => {
     ];
     const url = req.url();
     if (!whitelist.includes(req.resourceType())) {
-        debugLog.loader("unallowed resource type for resource URL: "+url);
+        debugLog.loader("unallowed resource type for resource URL: " + url);
         return false;
     }
     const blacklist = [
@@ -117,10 +117,10 @@ const requestIsAllowed = (req:puppeteer.Request) => {
         "gs.js",
         "analytics.js"
     ];
-    for(const blacklisted of blacklist) {
+    for (const blacklisted of blacklist) {
         const arr = url.match(blacklisted);
         if (arr != null && arr.length > 0) {
-            debugLog.loader("blacklisted resource URL: "+url);
+            debugLog.loader("blacklisted resource URL: " + url);
             return false;
         }
     }

@@ -1,31 +1,31 @@
 import { Queue } from "./queue";
 import puppeteer from 'puppeteer';
-import {debugLog} from "./logging";
+import { debugLog } from "./logging";
 
 interface paramsType {
-    maxPages:number,
-    maxHits:number, // max number of pages over lifetime
-    maxAgeUnused:number, // seconds since last page opened
+    maxPages: number,
+    maxHits: number, // max number of pages over lifetime
+    maxAgeUnused: number, // seconds since last page opened
 }
 
 interface statsType {
-    pages:number, // curent number of pages
-    hits:number, // current count of pages opened over lifetime
-    lastUsedAt:Date,
+    pages: number, // curent number of pages
+    hits: number, // current count of pages opened over lifetime
+    lastUsedAt: Date,
 }
 
 export class Browser {
-    browser:puppeteer.Browser|null;
-    launched:Promise<void>;
-    queue:Queue; // queue of pages to create
-    params:paramsType;
-    stats:statsType;
+    browser: puppeteer.Browser | null;
+    launched: Promise<void>;
+    queue: Queue; // queue of pages to create
+    params: paramsType;
+    stats: statsType;
     constructor(
-        executablePath:string,
-        maxPages:number,
-        maxHits:number,
-        maxAgeUnused:number,
-        maxQueueSize:number,
+        executablePath: string,
+        maxPages: number,
+        maxHits: number,
+        maxAgeUnused: number,
+        maxQueueSize: number,
     ) {
         debugLog.browser("creating");
         this.browser = null;
@@ -43,13 +43,13 @@ export class Browser {
             lastUsedAt: new Date(),
         }
     }
-    async launch(executablePathStr:string) {
-        let executablePath:string|undefined = undefined;
+    async launch(executablePathStr: string) {
+        let executablePath: string | undefined = undefined;
         if (executablePathStr !== "Puppeteer-bundled") {
             executablePath = executablePathStr;
         }
         this.browser = await puppeteer.launch({
-            headless:true,
+            headless: true,
             executablePath,
             args: [
                 "--disable-dev-shm-usage",
@@ -76,8 +76,8 @@ export class Browser {
         return result;
     }
     isUnused() {
-        const t = new Date().valueOf()/1000;
-        const lastUsed = this.stats.lastUsedAt.valueOf()/1000;
+        const t = new Date().valueOf() / 1000;
+        const lastUsed = this.stats.lastUsedAt.valueOf() / 1000;
         const result = t - lastUsed > this.params.maxAgeUnused;
         if (result) {
             debugLog.browser("unused");
@@ -116,7 +116,7 @@ export class Browser {
         debugLog.browser("created page");
         return page;
     }
-    async closePage(page:puppeteer.Page) {
+    async closePage(page: puppeteer.Page) {
         debugLog.browser("closing page");
         await page.close();
         debugLog.browser("closed page");
@@ -133,8 +133,8 @@ export class Browser {
     }
 }
 
-const sleepAsync = async (ms:number) => {
-    return new Promise(resolve=>{
-        setTimeout(resolve,ms)
+const sleepAsync = async (ms: number) => {
+    return new Promise(resolve => {
+        setTimeout(resolve, ms)
     });
 }
