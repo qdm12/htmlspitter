@@ -6,7 +6,7 @@ ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1
 COPY package.json package-lock.json ./
 RUN npm install
 COPY . ./
-# TODO run tests
+RUN npm t
 RUN npm run build
 
 FROM node:${NODE_VERSION}

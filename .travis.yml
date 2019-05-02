@@ -1,8 +1,0 @@
-
-language: generic
-services:
-  - docker
-install:
-  - docker build .
-after_script:
-  - "curl -X POST https://hooks.microbadger.com/images/qmcgaw/htmlspitter/KewEE8qvhXD4dYZE6Wwo1mkU5eE="
