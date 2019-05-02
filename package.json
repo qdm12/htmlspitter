@@ -1,45 +1,49 @@
 {
-  "name": "htmlspitter",
-  "version": "1.0.0",
-  "description": "NodeJS server to spit out HTML from loaded JS using Puppeteer",
-  "main": "./build/main.js",
-  "scripts": {
-    "build": "tsc",
-    "start": "tsc && node ./build/main.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/qdm12/htmlspitter.git"
-  },
-  "keywords": [
-    "puppeteer",
-    "html",
-    "javascript",
-    "typescript",
-    "scrap",
-    "scrapper"
-  ],
-  "author": "Quentin McGaw",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/qdm12/htmlspitter/issues"
-  },
-  "homepage": "https://github.com/qdm12/htmlspitter#readme",
-  "dependencies": {
-    "debug": "^4.1.1",
-    "express": "^4.16.4",
-    "node-fetch": "^2.3.0",
-    "puppeteer": "^1.14.0",
-    "supports-color": "^6.1.0",
-    "winston": "^3.2.1"
-  },
-  "devDependencies": {
-    "@types/debug": "^4.1.4",
-    "@types/express": "^4.16.1",
-    "@types/node-fetch": "^2.3.2",
-    "@types/puppeteer": "^1.12.3",
-    "@types/winston": "^2.4.4",
-    "nodemon": "^1.18.10",
-    "typescript": "^3.4.2"
-  }
+    "name": "htmlspitter",
+    "version": "1.0.0",
+    "description": "NodeJS server to spit out HTML from loaded JS using Puppeteer",
+    "main": "./build/main.js",
+    "scripts": {
+        "build": "tsc",
+        "start": "tsc && node ./build/main.js",
+        "test": "jest"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/qdm12/htmlspitter.git"
+    },
+    "keywords": [
+        "puppeteer",
+        "html",
+        "javascript",
+        "typescript",
+        "scrap",
+        "scrapper"
+    ],
+    "author": "Quentin McGaw",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/qdm12/htmlspitter/issues"
+    },
+    "homepage": "https://github.com/qdm12/htmlspitter#readme",
+    "dependencies": {
+        "debug": "^4.1.1",
+        "express": "^4.16.4",
+        "node-fetch": "^2.3.0",
+        "puppeteer": "^1.14.0",
+        "supports-color": "^6.1.0",
+        "winston": "^3.2.1"
+    },
+    "devDependencies": {
+        "@types/debug": "^4.1.4",
+        "@types/express": "^4.16.1",
+        "@types/jest": "^24.0.12",
+        "@types/node-fetch": "^2.3.2",
+        "@types/puppeteer": "^1.12.3",
+        "@types/winston": "^2.4.4",
+        "jest": "^24.7.1",
+        "nodemon": "^1.18.10",
+        "ts-jest": "^24.0.2",
+        "typescript": "^3.4.2"
+    }
 }
