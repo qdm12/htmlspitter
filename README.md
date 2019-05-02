@@ -108,12 +108,12 @@ An example of a request is `http://localhost:8000/?url=https://github.com/qdm12/
 | --- | --- | --- | --- |
 | `PORT` | `8000` | `1024 to 65535` | Internal HTTP server listening port |
 | `CHROME_BIN` | `Puppeteer-bundled` | any path or `Puppeteer-bundled` | Path to Chromium binary |
-| `MAX_PAGES` | `10` | number `> 0` | Max number of pages per Chromium instance at any time |
-| `MAX_HITS` | `300` | number `> 0` | Max number of pages opened per Chromium instance during its lifetime (before relaunch) |
-| `MAX_AGE_UNUSED` | `60` | number `> 0` | Max age in seconds of inactivity before the browser is closed |
-| `MAX_BROWSERS` | `10` | number `> 0` | Max number of Chromium instances at any time |
-| `MAX_CACHE_SIZE` | `10` | number `> 0` | Max number of MB stored in the cache |
-| `MAX_QUEUE_SIZE` | `100` | number `> 0` | Max size of queue of pages per Chromium instance |
+| `MAX_PAGES` | `10` | number `> 0` | Max number of pages per Chromium instance at any time, `-1` for no max |
+| `MAX_HITS` | `300` | number `> 0` | Max number of pages opened per Chromium instance during its lifetime (before relaunch), `-1` for no max |
+| `MAX_AGE_UNUSED` | `60` | number `> 0` | Max age in seconds of inactivity before the browser is closed, `-1` for no max |
+| `MAX_BROWSERS` | `10` | number `> 0` | Max number of Chromium instances at any time, `-1` for no max |
+| `MAX_CACHE_SIZE` | `10` | number `> 0` | Max number of MB stored in the cache, `-1` for no max |
+| `MAX_QUEUE_SIZE` | `100` | number `> 0` | Max size of queue of pages per Chromium instance, `-1` for no max |
 | `LOG` | `normal` | `normal` or `json` | Format to use to print logs |
 
 ## Details
@@ -174,6 +174,12 @@ An example of a request is `http://localhost:8000/?url=https://github.com/qdm12/
 
         ```sh
         docker build -t qmcgaw/htmlspitter .
+        ```
+
+    - Run tests
+
+        ```sh
+        npm t
         ```
 
 ### TODOs

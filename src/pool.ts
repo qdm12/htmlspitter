@@ -102,7 +102,7 @@ export class Pool {
         }
     }
     getBrowserLeastPages() {
-        let minID = 0, minPages = this.params.maxPages + 1;
+        let minID = 0, minPages = Infinity;
         this.pool.forEach((b, id) => {
             if (b.stats.pages < minPages) {
                 minPages = b.stats.pages;
