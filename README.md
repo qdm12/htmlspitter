@@ -185,7 +185,6 @@ An example of a request is `http://localhost:8000/?url=https://github.com/qdm12/
 
 ### TODOs
 
-- Limit cache in terms of MB
 - Limit Chromium instances in terms of RAM
 - Compression Gzip
 - Sync same URL with Redis (not getting twice the same URL)

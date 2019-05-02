@@ -28,20 +28,21 @@ export const spitHTML = async (
     const waitUntil = buildWaitUntil(wait);
     const browser = await pool.getBrowser();
     const page = await browser.createPage();
-    await page.setRequestInterception(true);
-    // Avoid all unecessary HTTP requests
-    page.on('request', req => {
-        if (requestIsAllowed(req)) {
-            req.continue();
-        } else {
-            req.abort();
-        }
-    });
+    // await page.setRequestInterception(true);
+    // // Avoid all unecessary HTTP requests
+    // page.on('request', req => {
+    //     if (requestIsAllowed(req)) {
+    //         req.continue();
+    //     } else {
+    //         req.abort();
+    //     }
+    // });
     // Load and wait for the page
     debugLog.loader("going to page " + url);
     try {
         await page.goto(url, {
-            waitUntil
+            waitUntil,
+            timeout: 6000,
         });
     } catch (e) {
         recordBadURL(url);
