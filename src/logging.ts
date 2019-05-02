@@ -10,10 +10,12 @@ export const setLoggerFormat = (s: string) => {
     switch (s) {
         case "json":
             logger.format = format.combine(format.json(), format.timestamp());
-        case "human":
+            break;
+        case "normal":
             logger.format = format.combine(format.cli(), format.colorize());
+            break;
         default:
-            throw Error(`Logger format '${format}' is unrecognized`);
+            throw Error(`Logger format '${s}' is unrecognized`);
     }
 }
 

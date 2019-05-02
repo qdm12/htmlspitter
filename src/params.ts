@@ -83,7 +83,7 @@ export class Params {
     static getLog(s: string | undefined): string {
         if (s === undefined) {
             return "normal";
-        } else if (s !== "human" && s !== "json") {
+        } else if (s !== "normal" && s !== "json") {
             throw Error(`Environment variable LOG '${s}' is unrecognized`);
         }
         return s;

@@ -26,7 +26,7 @@ RUN addgroup -S chromium && \
     rm -rf /var/cache/* && \
     mkdir /var/cache/apk
 HEALTHCHECK --interval=10s --timeout=3s --start-period=5s --retries=1 CMD [ "node", "./build/healthcheck.js" ]
-ENTRYPOINT [ "npm", "run", "start" ]
+ENTRYPOINT [ "node", "./build/main.js" ]
 COPY package.json package-lock.json ./
 RUN npm install --only=prod
 COPY --from=builder --chown=chromium:chromium /htmlspitter/build /htmlspitter/build

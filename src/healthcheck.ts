@@ -2,7 +2,7 @@ import fetch from "node-fetch";
 
 const getHealthcheck = async () => {
     try {
-        const res = await fetch("http://localhost:8000");
+        const res = await fetch("http://localhost:8000/healthcheck");
         if (res.status !== 200) {
             console.log("status code is " + res.status);
             process.exit(1);
