@@ -1,22 +1,23 @@
 import { createLogger, format, transports, Logger } from "winston";
-import { Format } from "logform";
 
-export let logger: Logger;
+export let logger: Logger = createLogger({
+    level: "info",
+    format: format.combine(format.colorize(), format.cli()),
+    transports: new transports.Console(),
+});
 
-export const initLogger = (json: boolean) => {
-    const f: Format | undefined = json ? format.combine(
-        format.timestamp(),
-        format.json()
-    ) : format.combine(
-        format.colorize(),
-        format.cli()
-    );
-    logger = createLogger({
-        level: "info",
-        format: f,
-        transports: new transports.Console(),
-    });
+export const setLoggerFormat = (s: string) => {
+    switch (s) {
+        case "json":
+            logger.format = format.combine(format.json(), format.timestamp());
+        case "human":
+            logger.format = format.combine(format.cli(), format.colorize());
+        default:
+            throw Error(`Logger format '${format}' is unrecognized`);
+    }
 }
+
+export const silence = (silent: boolean) => logger.silent = silent;
 
 export const debugLog = {
     main: require('debug')('htmlspitter:main'),

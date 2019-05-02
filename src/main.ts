@@ -1,5 +1,5 @@
 import { Params } from './params';
-import { debugLog, initLogger, logger } from './logging';
+import { debugLog, setLoggerFormat, logger } from './logging';
 import { Pool } from './pool';
 import { Server } from './server';
 import { CacheHTML } from './cache';
@@ -18,7 +18,7 @@ const main = async () => {
         console.log(" == by github.com/qdm12 - Quentin McGaw ==\n");
     }
     debugLog.main("Starting");
-    initLogger(params.log === "json");
+    setLoggerFormat(params.log);
     logger.info(params.toString());
     debugLog.main("Creating pool of browsers");
     pool = new Pool(
