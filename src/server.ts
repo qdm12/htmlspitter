@@ -7,15 +7,15 @@ import { pool, cache } from './main';
 export class Server {
     app: Express;
     server: http.Server;
-    constructor(port: number) {
+    constructor(port: number, catchRequests: boolean) {
         this.app = express();
-        this.setupRoutes(this.app);
+        this.setupRoutes(this.app, catchRequests);
         this.server = this.app.listen(
             port,
             () => logger.info("server listening on port " + port),
         );
     }
-    setupRoutes(app: Express) {
+    setupRoutes(app: Express, catchRequests: boolean) {
         debugLog.server("setting up server routes");
         app.get('/', async (req, res, _) => {
             logger.info("received HTTP GET: " + req.url);
@@ -27,7 +27,7 @@ export class Server {
             }
             const wait = req.query["wait"];
             try {
-                const html = await spitHTML(url, wait, pool, cache);
+                const html = await spitHTML(url, wait, pool, cache, catchRequests);
                 return res.status(200).send({
                     "html": html
                 });

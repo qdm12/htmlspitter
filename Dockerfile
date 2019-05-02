@@ -26,7 +26,8 @@ RUN addgroup -S chromium && \
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1 \
     CHROME_BIN=/usr/bin/chromium-browser \
     CHROME_PATH=/usr/lib/chromium/ \
-    NODE_ENV=production
+    NODE_ENV=production \
+    CATCH_REQUESTS=no
 HEALTHCHECK --interval=10s --timeout=3s --start-period=5s --retries=1 CMD [ "node", "./build/healthcheck.js" ]
 ENTRYPOINT [ "node", "./build/main.js" ]
 COPY package.json package-lock.json ./

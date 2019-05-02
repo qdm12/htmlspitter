@@ -170,6 +170,21 @@ describe("getLog", () => {
     });
 });
 
+describe("getCatchRequests", () => {
+    it("returns default", () => {
+        const catchRequests = Params.getCatchRequests(undefined);
+        expect(catchRequests).toBe(true);
+    });
+    it("throws an error when it's not valid", () => {
+        const f = () => Params.getLog("troll")
+        expect(f).toThrowError("Environment variable LOG 'troll' is unrecognized");
+    });
+    it("returns the log", () => {
+        const log = Params.getLog("json");
+        expect(log).toBe("json");
+    });
+});
+
 describe("toString", () => {
     it("returns stringified params", () => {
         const p = new Params({});
