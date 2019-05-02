@@ -3,12 +3,12 @@ import { debugLog } from "./logging";
 class Value {
     url: string;
     html: string;
-    size: number;
+    size: number; // bytes
     created: Date;
     constructor(url: string, html: string) {
         this.url = url;
         this.html = html;
-        this.size = url.length + html.length;
+        this.size = 2 * (url.length + html.length);
         this.created = new Date();
     }
 }
@@ -16,7 +16,7 @@ class Value {
 export class CacheHTML {
     map: Map<string, Value>;
     maxSize: number;
-    size: number;
+    size: number; // bytes
     constructor(maxSize: number) {
         this.map = new Map<string, Value>();
         this.maxSize = maxSize;

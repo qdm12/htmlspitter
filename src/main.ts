@@ -30,7 +30,7 @@ const main = async () => {
         params.maxQueueSize,
     );
     debugLog.main("Creating cache");
-    cache = new CacheHTML(params.maxCacheSize);
+    cache = new CacheHTML(params.maxCacheSize * 1000000);
     debugLog.main("Launching server");
     const server = new Server(params.port);
     process.on('SIGTERM', () => {
