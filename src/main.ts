@@ -8,7 +8,13 @@ export let cache: CacheHTML;
 export let pool: Pool;
 
 const main = async () => {
-    const params = new Params(process.env);
+    const params = new Params();
+    try {
+        params.parse(process.env);
+    } catch (error) {
+        logger.error(error);
+        process.exit(1);
+    }
     if (params.log === "normal") {
         console.log("\n =========================================");
         console.log(" =========================================");

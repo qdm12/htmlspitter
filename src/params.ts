@@ -12,7 +12,19 @@ export class Params {
     maxQueueSize: number;
     catchRequests: boolean;
     log: string;
-    constructor(env: NodeJS.ProcessEnv) {
+    constructor() {
+        this.port = 8000;
+        this.executablePath = "Puppeteer-bundled";
+        this.maxPages = 10;
+        this.maxHits = 300;
+        this.maxAgeUnused = 60;
+        this.maxBrowsers = 10;
+        this.maxCacheSize = 10;
+        this.maxQueueSize = 100;
+        this.log = "normal";
+        this.catchRequests = true;
+    }
+    parse(env: NodeJS.ProcessEnv) {
         debugLog.params("reading parameters");
         let uid: number;
         try {
@@ -20,20 +32,20 @@ export class Params {
         } catch (error) {
             uid = -1;
         }
-        this.port = Params.getPort(env.PORT, uid);
-        this.executablePath = Params.getExecutablePath(env.CHROME_BIN);
-        this.maxPages = Params.getMax(env.MAX_PAGES, "MAX_PAGES", 10);
-        this.maxHits = Params.getMax(env.MAX_HITS, "MAX_HITS", 300);
-        this.maxAgeUnused = Params.getMax(env.MAX_AGE_UNUSED, "MAX_AGE_UNUSED", 60);
-        this.maxBrowsers = Params.getMax(env.MAX_BROWSERS, "MAX_BROWSERS", 10);
-        this.maxCacheSize = Params.getMax(env.MAX_CACHE_SIZE, "MAX_CACHE_SIZE", 10);
-        this.maxQueueSize = Params.getMax(env.MAX_QUEUE_SIZE, "MAX_QUEUE_SIZE", 100);
-        this.log = Params.getLog(env.LOG);
-        this.catchRequests = Params.getCatchRequests(env.CATCH_REQUESTS);
+        this.port = Params.getPort(env.PORT, uid) || this.port;
+        this.executablePath = Params.getExecutablePath(env.CHROME_BIN) || this.executablePath;
+        this.maxPages = Params.getMax(env.MAX_PAGES, "MAX_PAGES") || this.maxPages;
+        this.maxHits = Params.getMax(env.MAX_HITS, "MAX_HITS") || this.maxHits;
+        this.maxAgeUnused = Params.getMax(env.MAX_AGE_UNUSED, "MAX_AGE_UNUSED") || this.maxAgeUnused;
+        this.maxBrowsers = Params.getMax(env.MAX_BROWSERS, "MAX_BROWSERS") || this.maxBrowsers;
+        this.maxCacheSize = Params.getMax(env.MAX_CACHE_SIZE, "MAX_CACHE_SIZE") || this.maxCacheSize;
+        this.maxQueueSize = Params.getMax(env.MAX_QUEUE_SIZE, "MAX_QUEUE_SIZE") || this.maxQueueSize;
+        this.log = Params.getLog(env.LOG) || this.log;
+        this.catchRequests = Params.getCatchRequests(env.CATCH_REQUESTS) || this.catchRequests;
     }
     static getPort(s: string | undefined, uid: number): number {
-        if (s === undefined) {
-            return 8000;
+        if (s === undefined || s === "") {
+            return 0; // set to default
         }
         const port = Number(s);
         if (Number.isNaN(port)) {
@@ -58,17 +70,17 @@ export class Params {
         return port;
     }
     static getExecutablePath(s: string | undefined): string {
-        if (s === undefined) {
-            return "Puppeteer-bundled";
+        if (s === undefined || s === "") {
+            return ""; // set to default
         }
         if (!existsSync(s)) {
             throw Error(`${s} does not exist`);
         }
         return s;
     }
-    static getMax(s: string | undefined, envName: string, defaultValue: number): number {
-        if (s === undefined) {
-            return defaultValue;
+    static getMax(s: string | undefined, envName: string): number {
+        if (s === undefined || s === "") {
+            return 0;  // set to default
         }
         const n = Number(s);
         if (Number.isNaN(n)) {
@@ -83,16 +95,16 @@ export class Params {
         return n;
     }
     static getLog(s: string | undefined): string {
-        if (s === undefined) {
-            return "normal";
+        if (s === undefined || s === "") {
+            return "";  // set to default
         } else if (s !== "normal" && s !== "json") {
             throw Error(`Environment variable LOG '${s}' is unrecognized`);
         }
         return s;
     }
-    static getCatchRequests(s: string | undefined): boolean {
-        if (s === undefined) {
-            return true;
+    static getCatchRequests(s: string | undefined): boolean | undefined {
+        if (s === undefined || s === "") {
+            return undefined;
         } else if (s !== "yes" && s !== "no") {
             throw Error(`Environment variable CATCH_REQUESTS '${s}' is unrecognized`);
         }
