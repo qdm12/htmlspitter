@@ -22,13 +22,13 @@
 
 | Image size | RAM usage | CPU usage |
 | --- | --- | --- |
-| 380MB | Depends | Depends |
+| 561MB | Depends | Depends |
 
 <details><summary>Click to show base components</summary><p>
 
-- [node:alpine](https://hub.docker.com/_/node/)
-- [Chromium 72.0.3626.121-r0](https://pkgs.alpinelinux.org/package/v3.9/community/x86_64/chromium) with its dependencies `harfbuzz` and `nss`
-- [Puppeteer 1.14](https://github.com/GoogleChrome/puppeteer/releases/tag/v1.14.0)
+- [node:slim](https://hub.docker.com/_/node/)
+- [Google Chrome 76](https://www.ubuntuupdates.org/package/google_chrome/stable/main/base/google-chrome-unstable) with its dependencies
+- [Puppeteer 1.15](https://github.com/GoogleChrome/puppeteer/releases/tag/v1.15.0)
 
 </p></details>
 
@@ -128,16 +128,16 @@ docker run -it --rm --init --security-opt seccomp=$(pwd)/chrome.json -p 8000:800
 
 ### Docker
 
-- [chrome.json](chrome.json) is required as Alpine is more restricted than Debian for example. Launching a Chromium process from the NodeJS entrypoint is impossible otherwise. I am opened to suggestions from more advised users on how to find an alternative solution
+- [chrome.json](chrome.json) may be required depending on your host OS.
 - The `--init` flag is added to prevent eventual zombie Chromium processes to exist when the container stops the main NodeJS program.
 - A built in healthcheck is implemented by running `node build/healthcheck.js` against a running instance.
 
 ### Performance considerations
 
 - Chromium is written in C++ and multi threaded so it scales well with more CPU cores
-- The NodeJS program should not be the bottleneck as all the work is done by Chromium
-- The bottleneck is the limit of pages per Chromium instance, and heavily depends on RAM
-- You can scale up by having multiple machines running the program, behind a load balancer
+- The NodeJS program should not be the bottleneck because all the work is done by Chromium
+- The bottleneck will be CPU and especially RAM used by Chromium instance(s)
+- You can **scale up** by having multiple machines running the program, behind a load balancer
 
 ## Development
 

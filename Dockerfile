@@ -10,6 +10,20 @@ RUN npm t
 RUN npm run build
 
 FROM node:${NODE_VERSION}-slim
+LABEL org.label-schema.schema-version="1.0.0-rc1" \
+    maintainer="quentin.mcgaw@gmail.com" \
+    org.label-schema.build-date=$BUILD_DATE \
+    org.label-schema.vcs-ref=$VCS_REF \
+    org.label-schema.vcs-url="https://github.com/qdm12/htmlspitter" \
+    org.label-schema.url="https://github.com/qdm12/htmlspitter" \
+    org.label-schema.vcs-description="NodeJS server to spit out HTML from loaded JS using Puppeteer" \
+    org.label-schema.vcs-usage="https://github.com/qdm12/htmlspitter/blob/master/README.md#how-to-use" \
+    org.label-schema.docker.cmd="docker run -d --init -p 8000:8000 qmcgaw/htmlspitter" \
+    org.label-schema.docker.cmd.devel="docker run -it --rm --init -p 8000:8000 qmcgaw/htmlspitter" \
+    org.label-schema.docker.params="See Github" \
+    image-size="561MB" \
+    ram-usage="100MB minimum" \
+    cpu-usage="Medium to high"
 WORKDIR /htmlspitter
 EXPOSE 8000
 RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - && \
