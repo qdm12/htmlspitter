@@ -1,8 +1,6 @@
 # HTMLSpitter
 
-**Not production ready**
-
-Lightweight Docker image with NodeJS server to spit out HTML from loaded JS using Puppeteer and Chromium
+*Lightweight Docker image with NodeJS server to spit out HTML from loaded JS using Puppeteer and Chromium(s)*
 
 [![htmlspitter](https://github.com/qdm12/htmlspitter/raw/master/title.png)](https://hub.docker.com/r/qmcgaw/htmlspitter)
 
@@ -26,11 +24,13 @@ Lightweight Docker image with NodeJS server to spit out HTML from loaded JS usin
 | --- | --- | --- |
 | 380MB | Depends | Depends |
 
-Docker image is based on:
+<details><summary>Click to show base components</summary><p>
 
 - [node:alpine](https://hub.docker.com/_/node/)
 - [Chromium 72.0.3626.121-r0](https://pkgs.alpinelinux.org/package/v3.9/community/x86_64/chromium) with its dependencies `harfbuzz` and `nss`
 - [Puppeteer 1.14](https://github.com/GoogleChrome/puppeteer/releases/tag/v1.14.0)
+
+</p></details>
 
 Main program is written in Typescript and NodeJS
 
@@ -44,14 +44,16 @@ Runs a NodeJS Express server accepting HTTP requests with two URL parameters:
     - `networkidle0` (**default**, wait until there is no network connections for at least 500 ms)
     - `networkidle2` (wait until there are less than 3 network connections for at least 500 ms)
 
-An example of a request is `http://localhost:8000/?url=https://github.com/qdm12/htmlspitter`.
+An example of a request is `http://localhost:8000/?url=https://github.com/qdm12/htmlspitter`
+
+The server will adapt to scale up Chromium instances and will limit the number of opened pages per instance to prevent one page crashing all the other pages. It also has a 1 hour cache for loaded HTML, a queue system for  requests once all the maximum number of pages/chromium instances have been reached.
 
 ### How to use
 
 ### Using Docker
 
 ```sh
-docker run -it --rm --init --security-opt seccomp=$(pwd)/chrome.json -p 8000:8000 qmcgaw/htmlspitter
+docker run -it --rm --init -p 8000:8000 qmcgaw/htmlspitter
 ```
 
 You can also use [docker-compose.yml](docker-compose.yml).
@@ -183,6 +185,7 @@ docker run -it --rm --init --security-opt seccomp=$(pwd)/chrome.json -p 8000:800
 
 ### TODOs
 
+- Format JSON or raw HTML
 - Limit Chromium instances in terms of RAM
 - Compression Gzip
 - Sync same URL with Redis (not getting twice the same URL)
