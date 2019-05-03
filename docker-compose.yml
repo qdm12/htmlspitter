@@ -18,5 +18,4 @@ services:
       - MAX_CACHE_SIZE=
       - MAX_QUEUE_SIZE=
       - LOG=
-      - CATCH_REQUESTS=no
     restart: always

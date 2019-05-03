@@ -16,8 +16,7 @@ export const spitHTML = async (
     url: string,
     wait: string | undefined,
     pool: Pool,
-    cache: CacheHTML,
-    catchRequests: boolean) => {
+    cache: CacheHTML) => {
     if (badURLsConfirmed.has(url)) {
         throw Error(url + " is a confirmed bad URL");
     }
@@ -29,17 +28,15 @@ export const spitHTML = async (
     const waitUntil = buildWaitUntil(wait);
     const browser = await pool.getBrowser();
     const page = await browser.createPage();
-    if (catchRequests) {
-        await page.setRequestInterception(true);
-        // Avoid all unecessary HTTP requests
-        page.on('request', req => {
-            if (requestIsAllowed(req)) {
-                req.continue();
-            } else {
-                req.abort();
-            }
-        });
-    }
+    await page.setRequestInterception(true);
+    // Avoid all unecessary HTTP requests
+    page.on('request', req => {
+        if (requestIsAllowed(req)) {
+            req.continue();
+        } else {
+            req.abort();
+        }
+    });
     // Load and wait for the page
     debugLog.loader("going to page " + url);
     try {

@@ -10,7 +10,6 @@ export class Params {
     maxBrowsers: number;
     maxCacheSize: number;
     maxQueueSize: number;
-    catchRequests: boolean;
     log: string;
     constructor() {
         this.port = 8000;
@@ -22,7 +21,6 @@ export class Params {
         this.maxCacheSize = 10;
         this.maxQueueSize = 100;
         this.log = "normal";
-        this.catchRequests = true;
     }
     parse(env: NodeJS.ProcessEnv) {
         debugLog.params("reading parameters");
@@ -41,7 +39,6 @@ export class Params {
         this.maxCacheSize = Params.getMax(env.MAX_CACHE_SIZE, "MAX_CACHE_SIZE") || this.maxCacheSize;
         this.maxQueueSize = Params.getMax(env.MAX_QUEUE_SIZE, "MAX_QUEUE_SIZE") || this.maxQueueSize;
         this.log = Params.getLog(env.LOG) || this.log;
-        this.catchRequests = Params.getCatchRequests(env.CATCH_REQUESTS) || this.catchRequests;
     }
     static getPort(s: string | undefined, uid: number): number {
         if (s === undefined || s === "") {
@@ -101,14 +98,6 @@ export class Params {
             throw Error(`Environment variable LOG '${s}' is unrecognized`);
         }
         return s;
-    }
-    static getCatchRequests(s: string | undefined): boolean | undefined {
-        if (s === undefined || s === "") {
-            return undefined;
-        } else if (s !== "yes" && s !== "no") {
-            throw Error(`Environment variable CATCH_REQUESTS '${s}' is unrecognized`);
-        }
-        return s === "yes";
     }
     toString() {
         return JSON.stringify(this);

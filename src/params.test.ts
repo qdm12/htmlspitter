@@ -191,25 +191,10 @@ describe("getLog", () => {
     });
 });
 
-describe("getCatchRequests", () => {
-    it("returns default undefined", () => {
-        const catchRequests = Params.getCatchRequests(undefined);
-        expect(catchRequests).toBe(undefined);
-    });
-    it("throws an error when it's not valid", () => {
-        const f = () => Params.getLog("troll")
-        expect(f).toThrowError("Environment variable LOG 'troll' is unrecognized");
-    });
-    it("returns the log", () => {
-        const log = Params.getLog("json");
-        expect(log).toBe("json");
-    });
-});
-
 describe("toString", () => {
     it("returns stringified params", () => {
         const p = new Params();
         const s = p.toString();
-        expect(s).toBe("{\"port\":8000,\"executablePath\":\"Puppeteer-bundled\",\"maxPages\":10,\"maxHits\":300,\"maxAgeUnused\":60,\"maxBrowsers\":10,\"maxCacheSize\":10,\"maxQueueSize\":100,\"log\":\"normal\",\"catchRequests\":true}");
+        expect(s).toBe("{\"port\":8000,\"executablePath\":\"Puppeteer-bundled\",\"maxPages\":10,\"maxHits\":300,\"maxAgeUnused\":60,\"maxBrowsers\":10,\"maxCacheSize\":10,\"maxQueueSize\":100,\"log\":\"normal\"}");
     });
 });
