@@ -92,7 +92,7 @@ export class Params {
     }
     static getCatchRequests(s: string | undefined): boolean {
         if (s === undefined) {
-            return false;
+            return true;
         } else if (s !== "yes" && s !== "no") {
             throw Error(`Environment variable CATCH_REQUESTS '${s}' is unrecognized`);
         }

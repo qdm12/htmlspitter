@@ -189,6 +189,6 @@ describe("toString", () => {
     it("returns stringified params", () => {
         const p = new Params({});
         const s = p.toString();
-        expect(s).toBe("{\"port\":8000,\"executablePath\":\"Puppeteer-bundled\",\"maxPages\":10,\"maxHits\":300,\"maxAgeUnused\":60,\"maxBrowsers\":10,\"maxCacheSize\":10,\"maxQueueSize\":100,\"log\":\"normal\"}");
+        expect(s).toBe("{\"port\":8000,\"executablePath\":\"Puppeteer-bundled\",\"maxPages\":10,\"maxHits\":300,\"maxAgeUnused\":60,\"maxBrowsers\":10,\"maxCacheSize\":10,\"maxQueueSize\":100,\"log\":\"normal\",\"catchRequests\":false}");
     });
 });
