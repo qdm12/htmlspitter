@@ -6,8 +6,17 @@ services:
     container_name: htmlspitter
     network_mode: bridge
     init: true
-    security_opt:
-      - seccomp=./chrome.json
+    # security_opt:
+    #   - seccomp=./chrome.json
     ports:
       - 8000:8000/tcp
+    environment:
+      - MAX_PAGES=
+      - MAX_HITS=
+      - MAX_AGE_UNUSED=
+      - MAX_BROWSERS=
+      - MAX_CACHE_SIZE=
+      - MAX_QUEUE_SIZE=
+      - LOG=
+      - CATCH_REQUESTS=no
     restart: always

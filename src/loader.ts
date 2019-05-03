@@ -98,7 +98,7 @@ const buildWaitUntil = (wait: string | undefined) => {
             waitUntil = "networkidle0";
             break;
         default:
-            throw Error("waitS parameter ${wait} is invalid");
+            throw Error(`wait parameter ${wait} is invalid`);
     }
     return waitUntil;
 }
