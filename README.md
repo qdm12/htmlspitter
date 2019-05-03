@@ -50,23 +50,35 @@ An example of a request is `http://localhost:8000/?url=https://github.com/qdm12/
 
 ### Using Docker
 
-1. Download [chrome.json](chrome.json) to allow Chromium to be launched inside the container (Alpine)
+```sh
+docker run -it --rm --init --security-opt seccomp=$(pwd)/chrome.json -p 8000:8000 qmcgaw/htmlspitter
+```
 
-    ```sh
-    wget https://raw.githubusercontent.com/qdm12/htmlspitter/master/chrome.json
-    ```
+You can also use [docker-compose.yml](docker-compose.yml).
 
-1. Pull, run and test the container
+On some operating systems, you might have to use **seccomp** if Chromium fails to lauch. On your host run:
 
-    ```sh
-    docker run -d --name=htmlspitter --init --security-opt seccomp=$(pwd)/chrome.json -p 8000:8000 qmcgaw/htmlspitter
-    # Try a request
-    wget -qO- http://localhost:8000/?url=https://github.com/qdm12/htmlspitter
-    # Check the logs
-    docker logs htmlspitter
-    ```
+```sh
+wget https://raw.githubusercontent.com/qdm12/htmlspitter/master/chrome.json
+docker run -it --rm --init --security-opt seccomp=$(pwd)/chrome.json -p 8000:8000 qmcgaw/htmlspitter
+```
 
-    You can also use [docker-compose.yml](docker-compose.yml).
+### Environment variables
+
+| Environment variable | Default | Possible values | Description |
+| --- | --- | --- | --- |
+| `PORT` | `8000` | `1024 to 65535` | Internal HTTP server listening port |
+| `CHROME_BIN` | `Puppeteer-bundled` | any path or `Puppeteer-bundled` | Path to Chromium binary |
+| `MAX_PAGES` | `10` | number `> 0` | Max number of pages per Chromium instance at any time, `-1` for no max |
+| `MAX_HITS` | `300` | number `> 0` | Max number of pages opened per Chromium instance during its lifetime (before relaunch), `-1` for no max |
+| `MAX_AGE_UNUSED` | `60` | number `> 0` | Max age in seconds of inactivity before the browser is closed, `-1` for no max |
+| `MAX_BROWSERS` | `10` | number `> 0` | Max number of Chromium instances at any time, `-1` for no max |
+| `MAX_CACHE_SIZE` | `10` | number `> 0` | Max number of MB stored in the cache, `-1` for no max |
+| `MAX_QUEUE_SIZE` | `100` | number `> 0` | Max size of queue of pages per Chromium instance, `-1` for no max |
+| `LOG` | `normal` | `normal` or `json` | Format to use to print logs |
+| `CATCH_REQUESTS` | `no`  | `no` or `yes` | Prevent requets to images etc. from loading |
+
+**The `CATCH_REQUESTS` does not work in the container because of Chromium it seems. This will be fixed soon.**
 
 ### Using NodeJS
 
@@ -91,7 +103,7 @@ An example of a request is `http://localhost:8000/?url=https://github.com/qdm12/
     npm i
     ```
 
-1. Transcompile the Typescript code to Javascript and run `build/main.js`
+1. Transcompile the Typescript code to Javascript and run *build/main.js* with
 
     ```sh
     npm run start
@@ -102,23 +114,6 @@ An example of a request is `http://localhost:8000/?url=https://github.com/qdm12/
     ```sh
     wget -qO- http://localhost:8000/?url=https://github.com/qdm12/htmlspitter
     ```
-
-### Environment variables
-
-| Environment variable | Default | Possible values | Description |
-| --- | --- | --- | --- |
-| `PORT` | `8000` | `1024 to 65535` | Internal HTTP server listening port |
-| `CHROME_BIN` | `Puppeteer-bundled` | any path or `Puppeteer-bundled` | Path to Chromium binary |
-| `MAX_PAGES` | `10` | number `> 0` | Max number of pages per Chromium instance at any time, `-1` for no max |
-| `MAX_HITS` | `300` | number `> 0` | Max number of pages opened per Chromium instance during its lifetime (before relaunch), `-1` for no max |
-| `MAX_AGE_UNUSED` | `60` | number `> 0` | Max age in seconds of inactivity before the browser is closed, `-1` for no max |
-| `MAX_BROWSERS` | `10` | number `> 0` | Max number of Chromium instances at any time, `-1` for no max |
-| `MAX_CACHE_SIZE` | `10` | number `> 0` | Max number of MB stored in the cache, `-1` for no max |
-| `MAX_QUEUE_SIZE` | `100` | number `> 0` | Max size of queue of pages per Chromium instance, `-1` for no max |
-| `LOG` | `normal` | `normal` or `json` | Format to use to print logs |
-| `CATCH_REQUESTS` | `no`  | `no` or `yes` | Prevent requets to images etc. from loading |
-
-**The `CATCH_REQUESTS` does not work in the container because of Chromium it seems. This will be fixed soon.**
 
 ## Details
 

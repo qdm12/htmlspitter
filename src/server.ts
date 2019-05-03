@@ -20,7 +20,7 @@ export class Server {
         app.get('/', async (req, res, _) => {
             logger.info("received HTTP GET: " + req.url);
             const url = req.query["url"];
-            if (url === undefined) {
+            if (url === undefined || url === "") {
                 return res.status(403).send({
                     "error": "url parameter not provided"
                 });
