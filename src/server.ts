@@ -15,7 +15,7 @@ export class Server {
             () => logger.info("server listening on port " + port),
         );
     }
-    setupRoutes(app: Express) {
+    setupRoutes(app: Express, timeout: number) {
         debugLog.server("setting up server routes");
         app.get('/', async (req, res, _) => {
             logger.info("received HTTP GET: " + req.url);

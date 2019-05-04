@@ -23,8 +23,7 @@ describe("constructor", () => {
     });
 });
 
-
-describe("constructor", () => {
+describe("parse", () => {
     it("creates a params with all to default", () => {
         const env: NodeJS.ProcessEnv = {};
         const params = new Params();
@@ -87,8 +86,6 @@ describe("constructor", () => {
         expect(f).toThrowError("Environment variable PORT 'troll' is not a number");
     });
 });
-
-
 
 describe("getPort", () => {
     it("returns default 0", () => {
