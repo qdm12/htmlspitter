@@ -78,9 +78,7 @@ docker run -it --rm --init --security-opt seccomp=$(pwd)/chrome.json -p 8000:800
 | `MAX_CACHE_SIZE` | `10` | number `> 0` | Max number of MB stored in the cache, `-1` for no max |
 | `MAX_QUEUE_SIZE` | `100` | number `> 0` | Max size of queue of pages per Chromium instance, `-1` for no max |
 | `LOG` | `normal` | `normal` or `json` | Format to use to print logs |
-| `CATCH_REQUESTS` | `no`  | `no` or `yes` | Prevent requets to images etc. from loading |
-
-**The `CATCH_REQUESTS` does not work in the container because of Chromium it seems. This will be fixed soon.**
+| `TIMEOUT` | `15000`  | number `> 0` | Timeout in ms to load a page, `-1` for no timeout |
 
 ### Using NodeJS
 

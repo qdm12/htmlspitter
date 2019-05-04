@@ -19,6 +19,7 @@ describe("constructor", () => {
         expect(params.maxCacheSize).toBe(10);
         expect(params.maxQueueSize).toBe(100);
         expect(params.log).toBe("normal");
+        expect(params.timeout).toBe(7000);
     });
 });
 
@@ -37,6 +38,7 @@ describe("constructor", () => {
         expect(params.maxCacheSize).toBe(10);
         expect(params.maxQueueSize).toBe(100);
         expect(params.log).toBe("normal");
+        expect(params.timeout).toBe(7000);
     });
     it("creates a params with all from environment", () => {
         jest.resetAllMocks();
@@ -51,6 +53,7 @@ describe("constructor", () => {
             MAX_CACHE_SIZE: "100",
             MAX_QUEUE_SIZE: "1000",
             LOG: "json",
+            TIMEOUT: "8000",
         };
         const params = new Params();
         params.parse(env);
@@ -63,6 +66,7 @@ describe("constructor", () => {
         expect(params.maxCacheSize).toBe(100);
         expect(params.maxQueueSize).toBe(1000);
         expect(params.log).toBe("json");
+        expect(params.timeout).toBe(8000);
         expect(fs.existsSync).toHaveBeenCalled();
     });
     it("raises an error", () => {
@@ -76,6 +80,7 @@ describe("constructor", () => {
             MAX_CACHE_SIZE: "100",
             MAX_QUEUE_SIZE: "1000",
             LOG: "json",
+            TIMEOUT: "8000",
         };
         const params = new Params();
         const f = () => params.parse(env);
@@ -191,10 +196,37 @@ describe("getLog", () => {
     });
 });
 
+describe("getTimeout", () => {
+    it("returns default 0", () => {
+        const port = Params.getTimeout(undefined);
+        expect(port).toBe(0);
+    });
+    it("returns Infinity for -1", () => {
+        const port = Params.getTimeout("-1");
+        expect(port).toBe(Infinity);
+    });
+    it("returns timeout", () => {
+        const port = Params.getTimeout("8888");
+        expect(port).toBe(8888);
+    });
+    it("throws an error when it's not a number", () => {
+        const f = () => Params.getTimeout("troll")
+        expect(f).toThrowError("Environment variable TIMEOUT 'troll' is not a number");
+    });
+    it("throws an error when it's not an integer", () => {
+        const f = () => Params.getTimeout("1.2")
+        expect(f).toThrowError("Environment variable TIMEOUT 1.2 is not an integer");
+    });
+    it("throws an error when it's not a positive integer and not -1", () => {
+        const f = () => Params.getTimeout("-5")
+        expect(f).toThrowError("Environment variable TIMEOUT -5 must be positive");
+    });
+});
+
 describe("toString", () => {
     it("returns stringified params", () => {
         const p = new Params();
         const s = p.toString();
-        expect(s).toBe("{\"port\":8000,\"executablePath\":\"Puppeteer-bundled\",\"maxPages\":10,\"maxHits\":300,\"maxAgeUnused\":60,\"maxBrowsers\":10,\"maxCacheSize\":10,\"maxQueueSize\":100,\"log\":\"normal\"}");
+        expect(s).toBe("{\"port\":8000,\"executablePath\":\"Puppeteer-bundled\",\"maxPages\":10,\"maxHits\":300,\"maxAgeUnused\":60,\"maxBrowsers\":10,\"maxCacheSize\":10,\"maxQueueSize\":100,\"log\":\"normal\",\"timeout\":7000}");
     });
 });

@@ -38,7 +38,7 @@ const main = async () => {
     debugLog.main("Creating cache");
     cache = new CacheHTML(params.maxCacheSize * 1000000);
     debugLog.main("Launching server");
-    const server = new Server(params.port);
+    const server = new Server(params.port, params.timeout);
     process.on('SIGTERM', () => {
         debugLog.main("Closing server");
         server.close(

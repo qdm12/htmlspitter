@@ -16,7 +16,8 @@ export const spitHTML = async (
     url: string,
     wait: string | undefined,
     pool: Pool,
-    cache: CacheHTML) => {
+    cache: CacheHTML,
+    timeout: number) => {
     if (badURLsConfirmed.has(url)) {
         throw Error(url + " is a confirmed bad URL");
     }
@@ -42,7 +43,7 @@ export const spitHTML = async (
     try {
         await page.goto(url, {
             waitUntil,
-            timeout: 6000,
+            timeout,
         });
     } catch (e) {
         recordBadURL(url);

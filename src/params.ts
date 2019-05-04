@@ -11,6 +11,7 @@ export class Params {
     maxCacheSize: number;
     maxQueueSize: number;
     log: string;
+    timeout: number;
     constructor() {
         this.port = 8000;
         this.executablePath = "Puppeteer-bundled";
@@ -21,6 +22,7 @@ export class Params {
         this.maxCacheSize = 10;
         this.maxQueueSize = 100;
         this.log = "normal";
+        this.timeout = 7000;
     }
     parse(env: NodeJS.ProcessEnv) {
         debugLog.params("reading parameters");
@@ -39,6 +41,7 @@ export class Params {
         this.maxCacheSize = Params.getMax(env.MAX_CACHE_SIZE, "MAX_CACHE_SIZE") || this.maxCacheSize;
         this.maxQueueSize = Params.getMax(env.MAX_QUEUE_SIZE, "MAX_QUEUE_SIZE") || this.maxQueueSize;
         this.log = Params.getLog(env.LOG) || this.log;
+        this.timeout = Params.getTimeout(env.TIMEOUT) || this.timeout;
     }
     static getPort(s: string | undefined, uid: number): number {
         if (s === undefined || s === "") {
@@ -98,6 +101,22 @@ export class Params {
             throw Error(`Environment variable LOG '${s}' is unrecognized`);
         }
         return s;
+    }
+    static getTimeout(s: string | undefined): number {
+        if (s === undefined || s === "") {
+            return 0; // set to default
+        }
+        const timeout = Number(s);
+        if (Number.isNaN(timeout)) {
+            throw Error(`Environment variable TIMEOUT '${s}' is not a number`);
+        } else if (!Number.isInteger(timeout)) {
+            throw Error(`Environment variable TIMEOUT ${timeout} is not an integer`);
+        } else if (timeout === -1) {
+            return Infinity;
+        } else if (timeout < 1) {
+            throw Error(`Environment variable TIMEOUT ${timeout} must be positive`);
+        }
+        return timeout;
     }
     toString() {
         return JSON.stringify(this);

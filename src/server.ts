@@ -7,9 +7,9 @@ import { pool, cache } from './main';
 export class Server {
     app: Express;
     server: http.Server;
-    constructor(port: number) {
+    constructor(port: number, timeout: number) {
         this.app = express();
-        this.setupRoutes(this.app);
+        this.setupRoutes(this.app, timeout);
         this.server = this.app.listen(
             port,
             () => logger.info("server listening on port " + port),
@@ -27,7 +27,7 @@ export class Server {
             }
             const wait = req.query["wait"];
             try {
-                const html = await spitHTML(url, wait, pool, cache);
+                const html = await spitHTML(url, wait, pool, cache, timeout);
                 return res.status(200).send({
                     "html": html
                 });

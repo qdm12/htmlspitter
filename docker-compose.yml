@@ -18,4 +18,5 @@ services:
       - MAX_CACHE_SIZE=
       - MAX_QUEUE_SIZE=
       - LOG=
+      - TIMEOUT=
     restart: always
