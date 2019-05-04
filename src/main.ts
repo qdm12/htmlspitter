@@ -4,9 +4,6 @@ import { Pool } from './pool';
 import { Server } from './server';
 import { CacheHTML } from './cache';
 
-export let cache: CacheHTML;
-export let pool: Pool;
-
 const main = async () => {
     const params = new Params();
     try {
@@ -27,7 +24,7 @@ const main = async () => {
     setLoggerFormat(params.log);
     logger.info(params.toString());
     debugLog.main("Creating pool of browsers");
-    pool = new Pool(
+    const pool = new Pool(
         params.maxBrowsers,
         params.maxPages,
         params.maxHits,
@@ -36,9 +33,9 @@ const main = async () => {
         params.maxQueueSize,
     );
     debugLog.main("Creating cache");
-    cache = new CacheHTML(params.maxCacheSize * 1000000);
+    const cache = new CacheHTML(params.maxCacheSize * 1000000);
     debugLog.main("Launching server");
-    const server = new Server(params.port, params.timeout);
+    const server = new Server(params.port, pool, cache, params.timeout);
     process.on('SIGTERM', () => {
         debugLog.main("Closing server");
         server.close(

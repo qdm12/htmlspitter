@@ -1,15 +1,18 @@
 import express, { Express } from 'express';
 import http from "http";
 import validUrl from "valid-url";
-import { spitHTML } from './loader';
+import { Loader } from './loader';
 import { logger, debugLog } from './logging';
-import { pool, cache } from './main';
+import { Pool } from './pool';
+import { CacheHTML } from './cache';
 
 export class Server {
     app: Express;
     server: http.Server;
-    constructor(port: number, timeout: number) {
+    loader: Loader;
+    constructor(port: number, pool: Pool, cache: CacheHTML, timeout: number) {
         this.app = express();
+        this.loader = new Loader(pool, cache, timeout);
         this.setupRoutes(this.app, timeout);
         this.server = this.app.listen(
             port,
@@ -30,7 +33,7 @@ export class Server {
             }
             const wait = req.query["wait"];
             try {
-                const html = await spitHTML(url, wait, pool, cache, timeout);
+                const html = await this.loader.spitHTML(url, wait);
                 return res.status(200).send({
                     "html": html
                 });
