@@ -1,5 +1,6 @@
 import express, { Express } from 'express';
 import http from "http";
+import validUrl from "valid-url";
 import { spitHTML } from './loader';
 import { logger, debugLog } from './logging';
 import { pool, cache } from './main';
@@ -19,10 +20,12 @@ export class Server {
         debugLog.server("setting up server routes");
         app.get('/', async (req, res, _) => {
             logger.info("received HTTP GET: " + req.url);
-            const url = req.query["url"];
-            if (url === undefined || url === "") {
+            let url: string;
+            try {
+                url = this.verifyURL(req.query["url"])
+            } catch (e) {
                 return res.status(403).send({
-                    "error": "url parameter not provided"
+                    "error": String(e)
                 });
             }
             const wait = req.query["wait"];
@@ -47,6 +50,14 @@ export class Server {
             logger.warn("unhealthy");
             return res.status(500).send("unhealthy");
         });
+    }
+    verifyURL(url: string | undefined): string {
+        if (url === undefined || url === "") {
+            throw new Error("url parameter not provided")
+        } else if (validUrl.isWebUri(url) === undefined) {
+            throw new Error("url parameter is not a valid URL")
+        }
+        return url;
     }
     close(callback?: () => void) {
         this.server.close(callback);

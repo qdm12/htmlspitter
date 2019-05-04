@@ -32,6 +32,7 @@
         "node-fetch": "^2.3.0",
         "puppeteer": "^1.15.0",
         "supports-color": "^6.1.0",
+        "valid-url": "^1.0.9",
         "winston": "^3.2.1"
     },
     "devDependencies": {
@@ -40,6 +41,7 @@
         "@types/jest": "^24.0.12",
         "@types/node-fetch": "^2.3.2",
         "@types/puppeteer": "^1.12.3",
+        "@types/valid-url": "^1.0.2",
         "@types/winston": "^2.4.4",
         "jest": "^24.7.1",
         "nodemon": "^1.18.10",
