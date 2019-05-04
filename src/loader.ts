@@ -17,20 +17,22 @@ export class Loader {
         this.timeout = timeout;
     }
     spitHTML = async (url: string, wait: string | undefined) => {
+        // Check if it's in bad URLs
         if (this.badURLsConfirmed.has(url)) {
             throw Error(url + " is a confirmed bad URL");
         }
+        // Check if it's in our cache
         if (this.cache.hasValue(url)) {
             debugLog.loader("cache has HTML for URL " + url)
             return this.cache.getValueHTML(url);
         }
-        const waitUntil = this.buildWaitUntil(wait);
+        // Get a browser instance and create a page
         const browser = await this.pool.getBrowser();
         const page = await browser.createPage();
-        await page.setRequestInterception(true);
         // Avoid all unecessary HTTP requests
+        await page.setRequestInterception(true);
         page.on('request', req => {
-            if (this.requestIsAllowed(req)) {
+            if (Loader.requestIsAllowed(req)) {
                 req.continue();
             } else {
                 req.abort();
@@ -38,27 +40,21 @@ export class Loader {
         });
         // Load and wait for the page
         debugLog.loader("going to page " + url);
-        try {
-            await page.goto(url, {
-                waitUntil,
-                timeout: this.timeout,
-            });
-        } catch (e) {
-            this.recordBadURL(url);
-            throw e;
-        }
-        const t0 = this.cache.reduceSize();
-        const t1 = this.cache.cleanOld();
-        debugLog.loader("awaiting for HTML content");
         let html: string;
         try {
+            await page.goto(url, {
+                waitUntil: Loader.buildWaitUntil(wait),
+                timeout: this.timeout,
+            });
             html = await page.content();
         } catch (e) {
             this.recordBadURL(url);
             throw e;
         }
+        // Cleaning up
         page.close(); // async but no need to wait
-        await t0, t1;
+        this.cache.reduceSize(); // async but no need to wait
+        this.cache.cleanOld(); // async but no need to wait
         this.cache.setValue(url, html); // async but no need to wait
         debugLog.loader("spitting HTML of URL " + url);
         return html;
@@ -73,7 +69,7 @@ export class Loader {
             this.badURLs.add(url);
         }
     }
-    buildWaitUntil = (wait: string | undefined) => {
+    static buildWaitUntil = (wait: string | undefined) => {
         let waitUntil: puppeteer.LoadEvent;
         switch (wait) {
             case "load":
@@ -96,7 +92,7 @@ export class Loader {
         }
         return waitUntil;
     }
-    requestIsAllowed = (req: puppeteer.Request) => {
+    static requestIsAllowed = (req: puppeteer.Request) => {
         const whitelist = [
             "document",
             "script",

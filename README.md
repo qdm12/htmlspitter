@@ -2,6 +2,8 @@
 
 *Lightweight Docker image with NodeJS server to spit out HTML from loaded JS using Puppeteer and Chromium(s)*
 
+[Medium story: HTML from the Javascript world](https://medium.com/@quentin.mcgaw/html-from-the-javascript-world-c536f88d51df)
+
 [![htmlspitter](https://github.com/qdm12/htmlspitter/raw/master/title.png)](https://cloud.docker.com/repository/registry-1.docker.io/qmcgaw/htmlspitter)
 
 [![Docker Build Status](https://img.shields.io/docker/cloud/build/qmcgaw/htmlspitter.svg)](https://cloud.docker.com/repository/registry-1.docker.io/qmcgaw/htmlspitter)
