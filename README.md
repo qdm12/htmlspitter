@@ -59,7 +59,7 @@ The server will adapt to scale up Chromium instances and will limit the number o
     Build the Docker image with:
 
     ```sh
-    docker build -t qmcgaw/htmlspitter https://github.com/qdm12/htmlspitter
+    docker build -t qmcgaw/htmlspitter --build-arg GOOGLE_CHROME_UNSTABLE=no https://github.com/qdm12/htmlspitter.git
     ```
 
     </p></details>

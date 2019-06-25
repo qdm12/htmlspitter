@@ -10,6 +10,7 @@ RUN npm t
 RUN npm run build
 
 FROM node:${NODE_VERSION}-slim
+ARG GOOGLE_CHROME_UNSTABLE=yes
 LABEL org.label-schema.schema-version="1.0.0-rc1" \
     maintainer="quentin.mcgaw@gmail.com" \
     org.label-schema.build-date=$BUILD_DATE \
@@ -29,8 +30,9 @@ EXPOSE 8000
 RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - && \
     sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' && \
     apt-get -qq update && \
+    if [ "$GOOGLE_CHROME_UNSTABLE" = "yes" ]; then export CHROME_EXT=unstable; else export CHROME_EXT=stable; fi && \
     apt-get -qq install -y --no-install-recommends \
-    google-chrome-unstable fonts-ipafont-gothic \
+    google-chrome-${CHROME_EXT} fonts-ipafont-gothic \
     fonts-wqy-zenhei fonts-thai-tlwg fonts-kacst ttf-freefont && \
     rm -rf /var/lib/apt/lists/*
 RUN groupadd -r chromium && \
