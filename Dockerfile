@@ -21,7 +21,7 @@ LABEL org.label-schema.schema-version="1.0.0-rc1" \
     org.label-schema.docker.cmd="docker run -d --init -p 8000:8000 qmcgaw/htmlspitter" \
     org.label-schema.docker.cmd.devel="docker run -it --rm --init -p 8000:8000 qmcgaw/htmlspitter" \
     org.label-schema.docker.params="See Github" \
-    image-size="561MB" \
+    image-size="569MB" \
     ram-usage="100MB minimum" \
     cpu-usage="Medium to high"
 WORKDIR /htmlspitter

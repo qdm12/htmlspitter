@@ -24,7 +24,7 @@
 
 | Image size | RAM usage | CPU usage |
 | --- | --- | --- |
-| 561MB | 110MB+ | Low to High |
+| 569MB | 110MB+ | Low to High |
 
 <details><summary>Click to show base components</summary><p>
 
@@ -54,18 +54,30 @@ The server will adapt to scale up Chromium instances and will limit the number o
 
 ### Using Docker
 
-```sh
-docker run -it --rm --init -p 8000:8000 qmcgaw/htmlspitter
-```
+1. <details><summary>Click if you have an ARM device</summary><p>
 
-You can also use [docker-compose.yml](docker-compose.yml).
+    Build the Docker image with:
 
-On some operating systems, you might have to use **seccomp** if Chromium fails to lauch. On your host run:
+    ```sh
+    docker build -t qmcgaw/htmlspitter https://github.com/qdm12/htmlspitter
+    ```
 
-```sh
-wget https://raw.githubusercontent.com/qdm12/htmlspitter/master/chrome.json
-docker run -it --rm --init --security-opt seccomp=$(pwd)/chrome.json -p 8000:8000 qmcgaw/htmlspitter
-```
+    </p></details>
+
+1. Run the container
+
+    ```sh
+    docker run -it --rm --init -p 8000:8000 qmcgaw/htmlspitter
+    ```
+
+    You can also use [docker-compose.yml](https://github.com/qdm12/htmlspitter/blob/master/docker-compose.yml).
+
+    On some operating systems, you might have to use **seccomp** if Chromium fails to lauch. On your host run:
+
+    ```sh
+    wget https://raw.githubusercontent.com/qdm12/htmlspitter/master/chrome.json
+    docker run -it --rm --init --security-opt seccomp=$(pwd)/chrome.json -p 8000:8000 qmcgaw/htmlspitter
+    ```
 
 ### Environment variables
 
@@ -128,7 +140,7 @@ docker run -it --rm --init --security-opt seccomp=$(pwd)/chrome.json -p 8000:800
 
 ### Docker
 
-- [chrome.json](chrome.json) may be required depending on your host OS.
+- [chrome.json](https://github.com/qdm12/htmlspitter/blob/master/chrome.json) may be required depending on your host OS.
 - The `--init` flag is added to prevent eventual zombie Chromium processes to exist when the container stops the main NodeJS program.
 - A built in healthcheck is implemented by running `node build/healthcheck.js` against a running instance.
 
@@ -196,7 +208,6 @@ docker run -it --rm --init --security-opt seccomp=$(pwd)/chrome.json -p 8000:800
 - Unit testing
 - ReactJS GUI
 - Static binary in Scratch Docker image
-- ARM image with Travis CI
 
 ## Credits
 
