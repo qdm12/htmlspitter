@@ -29,8 +29,8 @@
 <details><summary>Click to show base components</summary><p>
 
 - [node:slim](https://hub.docker.com/_/node/)
-- [Google Chrome 76](https://www.ubuntuupdates.org/package/google_chrome/stable/main/base/google-chrome-unstable) with its dependencies
-- [Puppeteer 1.15](https://github.com/GoogleChrome/puppeteer/releases/tag/v1.15.0)
+- [Google Chrome 77](https://www.ubuntuupdates.org/package/google_chrome/stable/main/base/google-chrome-unstable) with its dependencies
+- [Puppeteer 1.18](https://github.com/GoogleChrome/puppeteer/releases/tag/v1.18.0)
 
 </p></details>
 
