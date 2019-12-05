@@ -1,0 +1,57 @@
+{
+    "name": "html-spitter-dev",
+    "dockerComposeFile": ["docker-compose.yml"],
+    "service": "vscode",
+    "runServices": ["vscode"],
+    "shutdownAction": "stopCompose",
+    "postCreateCommand": "npm install",
+    "workspaceFolder": "/workspace",
+    // "overrideCommand": "",
+    "extensions": [
+        "dbaeumer.vscode-eslint",
+        "ms-vscode.vscode-typescript-tslint-plugin",
+        "esbenp.prettier-vscode",
+        "visualstudioexptteam.vscodeintellicode",
+        "christian-kohler.npm-intellisense",
+        "IBM.output-colorizer",
+        "eamodio.gitlens",
+        "mhutchie.git-graph",
+        "davidanson.vscode-markdownlint",
+        "shardulm94.trailing-spaces",
+        "alefragnani.Bookmarks",
+        "Gruntfuggly.todo-tree",
+        "quicktype.quicktype",
+        "spikespaz.vscode-smoothtype",
+        "stkb.rewrap",
+        "vscode-icons-team.vscode-icons",
+        "ms-azuretools.vscode-docker"
+    ],
+    "settings": {
+        // General settings
+        "files.eol": "\n",
+        // Docker
+        "remote.extensionKind": {
+            "ms-azuretools.vscode-docker": "workspace"
+        },
+        "editor.codeActionsOnSave": {
+            "source.fixAll.tslint": true
+        },
+        "[javascript]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode",
+          "editor.formatOnSave": true
+        },
+        "[typescript]": {
+            "editor.defaultFormatter": "esbenp.prettier-vscode",
+            "editor.formatOnSave": false
+        },
+        "eslint.autoFixOnSave": true,
+        "eslint.validate": [
+            "javascript",
+            {
+              "autoFix": true,
+              "language": "typescript"
+            }
+        ],
+        "prettier.eslintIntegration": true
+    }
+}

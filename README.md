@@ -1,65 +1,66 @@
 # HTMLSpitter
 
-*Lightweight Docker image with NodeJS server to spit out HTML from loaded JS using Puppeteer and Chromium(s)*
+*Lightweight Docker image with NodeJS server to spit out HTML from loaded JS using Puppeteer and Chrome*
 
 [Medium story: HTML from the Javascript world](https://medium.com/@quentin.mcgaw/html-from-the-javascript-world-c536f88d51df)
 
 [![htmlspitter](https://github.com/qdm12/htmlspitter/raw/master/title.png)](https://hub.docker.com/r/qmcgaw/htmlspitter)
 
-[![Docker Build Status](https://img.shields.io/docker/cloud/build/qmcgaw/htmlspitter.svg)](https://hub.docker.com/r/qmcgaw/htmlspitter)
 [![Build Status](https://travis-ci.org/qdm12/htmlspitter.svg?branch=master)](https://travis-ci.org/qdm12/htmlspitter)
+[![Docker Pulls](https://img.shields.io/docker/pulls/qmcgaw/htmlspitter.svg)](https://hub.docker.com/r/qmcgaw/htmlspitter)
+[![Docker Stars](https://img.shields.io/docker/stars/qmcgaw/htmlspitter.svg)](https://hub.docker.com/r/qmcgaw/htmlspitter)
+[![Image size](https://images.microbadger.com/badges/image/qmcgaw/htmlspitter.svg)](https://microbadger.com/images/qmcgaw/htmlspitter)
+[![Image version](https://images.microbadger.com/badges/version/qmcgaw/htmlspitter.svg)](https://microbadger.com/images/qmcgaw/htmlspitter)
 
+[![Join Slack channel](https://img.shields.io/badge/slack-@qdm12-yellow.svg?logo=slack)](https://join.slack.com/t/qdm12/shared_invite/enQtODMwMDQyMTAxMjY1LTU1YjE1MTVhNTBmNTViNzJiZmQwZWRmMDhhZjEyNjVhZGM4YmIxOTMxOTYzN2U0N2U2YjQ2MDk3YmYxN2NiNTc)
 [![GitHub last commit](https://img.shields.io/github/last-commit/qdm12/htmlspitter.svg)](https://github.com/qdm12/htmlspitter/issues)
 [![GitHub commit activity](https://img.shields.io/github/commit-activity/y/qdm12/htmlspitter.svg)](https://github.com/qdm12/htmlspitter/issues)
 [![GitHub issues](https://img.shields.io/github/issues/qdm12/htmlspitter.svg)](https://github.com/qdm12/htmlspitter/issues)
 
-[![Docker Pulls](https://img.shields.io/docker/pulls/qmcgaw/htmlspitter.svg)](https://hub.docker.com/r/qmcgaw/htmlspitter)
-[![Docker Stars](https://img.shields.io/docker/stars/qmcgaw/htmlspitter.svg)](https://hub.docker.com/r/qmcgaw/htmlspitter)
-[![Docker Automated](https://img.shields.io/docker/cloud/automated/qmcgaw/htmlspitter.svg)](https://hub.docker.com/r/qmcgaw/htmlspitter)
-
-[![Image size](https://images.microbadger.com/badges/image/qmcgaw/htmlspitter.svg)](https://microbadger.com/images/qmcgaw/htmlspitter)
-[![Image version](https://images.microbadger.com/badges/version/qmcgaw/htmlspitter.svg)](https://microbadger.com/images/qmcgaw/htmlspitter)
-
-[![Donate PayPal](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://paypal.me/qdm12)
-
-| Image size | RAM usage | CPU usage |
-| --- | --- | --- |
-| 569MB | 110MB+ | Low to High |
+| Image size | RAM usage |
+| --- | --- |
+| 558MB | 110MB+ |
 
 <details><summary>Click to show base components</summary><p>
 
-- [node:slim](https://hub.docker.com/_/node/)
-- [Google Chrome 77](https://www.ubuntuupdates.org/package/google_chrome/stable/main/base/google-chrome-unstable) with its dependencies
-- [Puppeteer 1.18](https://github.com/GoogleChrome/puppeteer/releases/tag/v1.18.0)
+- [node:13.2-buster-slim](https://hub.docker.com/_/node/)
+- [Google Chrome 79 Beta](https://www.ubuntuupdates.org/package/google_chrome/stable/main/base/google-chrome-beta)
+- [Puppeteer v2.00](https://github.com/GoogleChrome/puppeteer/releases/tag/v2.0.0)
 
 </p></details>
 
-Main program is written in Typescript and NodeJS
+The program is written in NodeJS with Typescript, in the [src](src) directory.
 
 ## Description
 
-Runs a NodeJS Express server accepting HTTP requests with two URL parameters:
+Runs a NodeJS server accepting HTTP requests with two URL parameters:
+
 - `url` which is the URL to prerender into HTML
-- `wait` which is the load event to wait for before stopping the prerendering. It is **optional** and can be:
+- `wait` which is the **optional** load event to wait for before stopping the prerendering. It can be:
     - `load` (wait for the `load` event)
     - `domcontentloaded` (wait for the `DOMContentLoaded` event)
     - `networkidle0` (**default**, wait until there is no network connections for at least 500 ms)
     - `networkidle2` (wait until there are less than 3 network connections for at least 500 ms)
 
-An example of a request is `http://localhost:8000/?url=https://github.com/qdm12/htmlspitter`
+For example:
 
-The server will adapt to scale up Chromium instances and will limit the number of opened pages per instance to prevent one page crashing all the other pages. It also has a 1 hour cache for loaded HTML, a queue system for  requests once all the maximum number of pages/chromium instances have been reached.
+```
+http://localhost:8000/?url=https://github.com/qdm12/htmlspitter
+```
 
-### How to use
+- The server scales up Chromium instances if needed
+- It limits the number of opened pages per instance to prevent one page crashing all the other pages
+- It has a 1 hour cache for loaded HTML
+- It has a queue system for requests once the maximum number of pages/chromium instances is reached
 
-### Using Docker
+## Usage
 
-1. <details><summary>Click if you have an ARM device</summary><p>
+1. <details><summary>Click if you have have a non amd64 device (ARM)</summary><p>
 
-    Build the Docker image with:
+    Build the Docker image with (replace `arm32v7` with your CPU architecture):
 
     ```sh
-    docker build -t qmcgaw/htmlspitter --build-arg GOOGLE_CHROME_UNSTABLE=no https://github.com/qdm12/htmlspitter.git
+    docker build -t qmcgaw/htmlspitter --build-arg ARCH=arm32v7 https://github.com/qdm12/htmlspitter.git
     ```
 
     </p></details>
@@ -72,62 +73,35 @@ The server will adapt to scale up Chromium instances and will limit the number o
 
     You can also use [docker-compose.yml](https://github.com/qdm12/htmlspitter/blob/master/docker-compose.yml).
 
-    On some operating systems, you might have to use **seccomp** if Chromium fails to lauch. On your host run:
+## Environment variables
 
-    ```sh
-    wget https://raw.githubusercontent.com/qdm12/htmlspitter/master/chrome.json
-    docker run -it --rm --init --security-opt seccomp=$(pwd)/chrome.json -p 8000:8000 qmcgaw/htmlspitter
-    ```
-
-### Environment variables
-
-| Environment variable | Default | Possible values | Description |
+| Name | Default | Possible values | Description |
 | --- | --- | --- | --- |
-| `PORT` | `8000` | `1024 to 65535` | Internal HTTP server listening port |
-| `CHROME_BIN` | `Puppeteer-bundled` | any path or `Puppeteer-bundled` | Path to Chromium binary |
-| `MAX_PAGES` | `10` | number `> 0` | Max number of pages per Chromium instance at any time, `-1` for no max |
-| `MAX_HITS` | `300` | number `> 0` | Max number of pages opened per Chromium instance during its lifetime (before relaunch), `-1` for no max |
-| `MAX_AGE_UNUSED` | `60` | number `> 0` | Max age in seconds of inactivity before the browser is closed, `-1` for no max |
-| `MAX_BROWSERS` | `10` | number `> 0` | Max number of Chromium instances at any time, `-1` for no max |
-| `MAX_CACHE_SIZE` | `10` | number `> 0` | Max number of MB stored in the cache, `-1` for no max |
-| `MAX_QUEUE_SIZE` | `100` | number `> 0` | Max size of queue of pages per Chromium instance, `-1` for no max |
+| `MAX_PAGES` | `10` | `-1` or integer larger than `0` | Max number of pages per Chromium instance at any time, `-1` for no max |
+| `MAX_HITS` | `300` | `-1` or  integer larger than `0` | Max number of pages opened per Chromium instance during its lifetime (before relaunch), `-1` for no max |
+| `MAX_AGE_UNUSED` | `60` | `-1` or integer larger than `0` | Max age in seconds of inactivity before the browser is closed, `-1` for no max |
+| `MAX_BROWSERS` | `10` | `-1` or integer larger than `0` | Max number of Chromium instances at any time, `-1` for no max |
+| `MAX_CACHE_SIZE` | `10` | `-1` or integer larger than `0` | Max number of MB stored in the cache, `-1` for no max |
+| `MAX_QUEUE_SIZE` | `100` | `-1` or integer larger than `0` | Max size of queue of pages per Chromium instance, `-1` for no max |
 | `LOG` | `normal` | `normal` or `json` | Format to use to print logs |
-| `TIMEOUT` | `15000`  | number `> 0` | Timeout in ms to load a page, `-1` for no timeout |
+| `TIMEOUT` | `15000`  | `-1` or integer larger than `0` | Timeout in ms to load a page, `-1` for no timeout |
 
-### Using NodeJS
+## Troubleshooting
 
-1. Ensure you have NodeJS, NPM and Git installed
+### Chrome fails to launch
 
-    ```sh
-    node -v
-    npm -v
-    git -v
-    ```
+If you obtain the error:
 
-1. Clone the repository
+```json
+{"error":"Error: Failed to launch chrome!\nFailed to move to new namespace: PID namespaces supported, Network namespace supported, but failed: errno = Operation not permitted\n\n\nTROUBLESHOOTING: https://github.com/GoogleChrome/puppeteer/blob/master/docs/troubleshooting.md\n"}
+```
 
-    ```sh
-    git clone https://github.com/qdm12/htmlspitter
-    cd htmlspitter
-    ```
+Then you might need to use **seccomp** with the [chrome.json](https://github.com/qdm12/htmlspitter/blob/master/chrome.json) file of this repository:
 
-1. Install all the dependencies
-
-    ```sh
-    npm i
-    ```
-
-1. Transcompile the Typescript code to Javascript and run *build/main.js* with
-
-    ```sh
-    npm run start
-    ```
-
-1. In another terminal, test it with
-
-    ```sh
-    wget -qO- http://localhost:8000/?url=https://github.com/qdm12/htmlspitter
-    ```
+```sh
+wget https://raw.githubusercontent.com/qdm12/htmlspitter/master/chrome.json
+docker run -it --rm --init --security-opt seccomp=$(pwd)/chrome.json -p 8000:8000 qmcgaw/htmlspitter
+```
 
 ## Details
 
@@ -153,65 +127,71 @@ The server will adapt to scale up Chromium instances and will limit the number o
 
 ## Development
 
-### Setup
+- Either use the Docker container development image with Visual Studio Code and the remote development extension
+- Or install Node and NPM on your machine
 
-1. Ensure you have NodeJS, NPM and Git installed
+```sh
+# Install all dependencies
+npm i
+# Transcompile the Typescript code to Javascript and run build/main.js with
+npm run start
+```
+
+Test it with, for example:
+
+```sh
+wget -qO- http://localhost:8000/?url=https://github.com/qdm12/htmlspitter
+```
+
+You can also:
+
+- Run tests
 
     ```sh
-    node -v
-    npm -v
-    git -v
+    npm t
     ```
 
-1. Clone the repository
+- Run the sever with hot reload (performs `npm run start` on each .ts change)
 
     ```sh
-    git clone https://github.com/qdm12/htmlspitter
-    cd htmlspitter
+    npx nodemon
     ```
 
-1. Install all the dependencies
+- Build Docker
 
     ```sh
-    npm i
+    docker build -t qmcgaw/htmlspitter .
     ```
 
-1. You can then:
-    - Run the sever with hot reload (performs `npm run start` on each .ts change)
+    You can also specify the branch of Google Chrome from `beta` (default), `stable` and `unstable`
 
-        ```sh
-        npx nodemon
-        ```
+    ```sh
+    docker build -t qmcgaw/htmlspitter --build-arg GOOGLE_CHROME_BRANCH=unstable
+    ```
 
-    - Build Docker
-
-        ```sh
-        docker build -t qmcgaw/htmlspitter .
-        ```
-
-    - Run tests
-
-        ```sh
-        npm t
-        ```
+- There are two environment variables you might find useful:
+    - `PORT` to set the HTTP server listening port
+    - `CHROME_BIN` which is the path to the Chrome binary or `Puppeteer-bundled`
 
 ### TODOs
 
-- Fake user agents
-- Prevent recursive calls to localhost
-- Format JSON or raw HTML
-- Limit Chromium instances in terms of RAM
-- Compression Gzip
-- Sync same URL with Redis (not getting twice the same URL)
-- Sync Cache with Postgresql or Redis depending on size
-- Limit data size in Postgresql according to time created
-- Unit testing
-- ReactJS GUI
-- Static binary in Scratch Docker image
+- [ ] Fake user agents
+- [ ] Prevent recursive calls to localhost
+- [ ] Format JSON or raw HTML
+- [ ] Limit Chromium instances in terms of RAM
+- [ ] Compression Gzip
+- [ ] Sync same URL with Redis (not getting twice the same URL)
+- [ ] Sync Cache with Postgresql or Redis depending on size
+- [ ] Limit data size in Postgresql according to time created
+- [ ] Unit testing
+- [ ] ReactJS GUI
+- [ ] Static binary in Scratch Docker image
 
 ## Credits
 
 - Credits to [jessfraz](https://github.com/jessfraz) for [chrome.json](chrome.json)
+- The Google Chrome team
+- The Puppeteer developers
 
 ## License
 

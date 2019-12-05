@@ -1,6 +1,7 @@
-ARG NODE_VERSION=12.4.0
+ARG ALPINE_VERSION=3.10
+ARG NODE_VERSION=13.2
 
-FROM node:${NODE_VERSION}-alpine AS builder
+FROM node:${NODE_VERSION}-alpine${ALPINE_VERSION} AS builder
 WORKDIR /htmlspitter
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1
 COPY package.json package-lock.json ./
@@ -9,43 +10,43 @@ COPY . ./
 RUN npm t
 RUN npm run build
 
-FROM node:${NODE_VERSION}-slim
-ARG GOOGLE_CHROME_UNSTABLE=yes
-LABEL org.label-schema.schema-version="1.0.0-rc1" \
-    maintainer="quentin.mcgaw@gmail.com" \
-    org.label-schema.build-date=$BUILD_DATE \
-    org.label-schema.vcs-ref=$VCS_REF \
-    org.label-schema.vcs-url="https://github.com/qdm12/htmlspitter" \
-    org.label-schema.url="https://github.com/qdm12/htmlspitter" \
-    org.label-schema.vcs-description="NodeJS server to spit out HTML from loaded JS using Puppeteer" \
-    org.label-schema.vcs-usage="https://github.com/qdm12/htmlspitter/blob/master/README.md#how-to-use" \
-    org.label-schema.docker.cmd="docker run -d --init -p 8000:8000 qmcgaw/htmlspitter" \
-    org.label-schema.docker.cmd.devel="docker run -it --rm --init -p 8000:8000 qmcgaw/htmlspitter" \
-    org.label-schema.docker.params="See Github" \
-    image-size="569MB" \
-    ram-usage="100MB minimum" \
-    cpu-usage="Medium to high"
+FROM node:${NODE_VERSION}-buster-slim
+ARG ARCH=amd64
+ARG GOOGLE_CHROME_BRANCH=beta
+ARG VERSION
+ARG BUILD_DATE
+ARG VCS_REF
+LABEL \
+    org.opencontainers.image.authors="quentin.mcgaw@gmail.com" \
+    org.opencontainers.image.created=$BUILD_DATE \
+    org.opencontainers.image.version="$VERSION" \
+    org.opencontainers.image.revision=$VCS_REF \
+    org.opencontainers.image.url="https://github.com/qdm12/htmlspitter" \
+    org.opencontainers.image.documentation="https://github.com/qdm12/htmlspitter/blob/master/README.md" \
+    org.opencontainers.image.source="https://github.com/qdm12/htmlspitter" \
+    org.opencontainers.image.title="HTMLSpitter" \
+    org.opencontainers.image.description="Lightweight Docker image with NodeJS server to spit out HTML from loaded JS using Puppeteer and Chrome"
 WORKDIR /htmlspitter
 EXPOSE 8000
-RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - && \
-    sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' && \
+RUN apt-get -qq update && \
+    apt-get -qq install -y --no-install-recommends gnupg2 wget && \
+    wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - && \
+    apt-get -qq remove -y wget gnupg2 && \
+    sh -c 'echo "deb [arch=${ARCH}] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' && \
     apt-get -qq update && \
-    if [ "$GOOGLE_CHROME_UNSTABLE" = "yes" ]; then export CHROME_EXT=unstable; else export CHROME_EXT=stable; fi && \
-    apt-get -qq install -y --no-install-recommends \
-    google-chrome-${CHROME_EXT} fonts-ipafont-gothic \
-    fonts-wqy-zenhei fonts-thai-tlwg fonts-kacst ttf-freefont && \
+    apt-get -qq install -y --no-install-recommends google-chrome-${GOOGLE_CHROME_BRANCH} && \
     rm -rf /var/lib/apt/lists/*
-RUN groupadd -r chromium && \
-    useradd -r -g chromium -G audio,video chromium && \
-    mkdir -p /home/chromium/Downloads && \
-    chown -R chromium:chromium /home/chromium && \
-    chown -R chromium:chromium /htmlspitter
+RUN groupadd -r nonrootgroup && \
+    useradd -r -g nonrootgroup -G audio,video nonrootuser && \
+    mkdir -p /home/nonrootuser/Downloads && \
+    chown -R nonrootuser:nonrootgroup /home/nonrootuser && \
+    chown -R nonrootuser:nonrootgroup /htmlspitter
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1 \
-    CHROME_BIN=/usr/bin/google-chrome-unstable \
+    CHROME_BIN=/usr/bin/google-chrome-${GOOGLE_CHROME_BRANCH} \
     NODE_ENV=production
 HEALTHCHECK --interval=10s --timeout=3s --start-period=5s --retries=1 CMD [ "node", "./healthcheck.js" ]
 ENTRYPOINT [ "node", "./main.js" ]
 COPY package.json package-lock.json ./
 RUN npm install --only=prod
-COPY --from=builder /htmlspitter/build /htmlspitter
-USER chromium
+COPY --from=builder --chown=nonrootuser:nonrootgroup /htmlspitter/build /htmlspitter
+USER nonrootuser
