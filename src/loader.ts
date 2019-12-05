@@ -29,8 +29,10 @@ export class Loader {
         // Get a browser instance and create a page
         const browser = await this.pool.getBrowser();
         const page = await browser.createPage();
+        const tasks = [];
+        tasks.push(page.setCacheEnabled(false));
         // Avoid all unecessary HTTP requests
-        await page.setRequestInterception(true);
+        tasks.push(page.setRequestInterception(true));
         page.on('request', req => {
             if (Loader.requestIsAllowed(req)) {
                 req.continue();
@@ -42,6 +44,7 @@ export class Loader {
         debugLog.loader("going to page " + url);
         let html: string;
         try {
+            await Promise.all(tasks);
             await page.goto(url, {
                 waitUntil: Loader.buildWaitUntil(wait),
                 timeout: this.timeout,
