@@ -1,7 +1,7 @@
 ARG ALPINE_VERSION=3.10
 ARG NODE_VERSION=13.2
 
-FROM node:${NODE_VERSION}-alpine${ALPINE_VERSION} AS builder
+FROM node:${NODE_VERSION}-buster-slim AS builder
 WORKDIR /htmlspitter
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1
 COPY package.json package-lock.json ./

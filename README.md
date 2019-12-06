@@ -52,18 +52,9 @@ http://localhost:8000/?url=https://github.com/qdm12/htmlspitter
 - It limits the number of opened pages per instance to prevent one page crashing all the other pages
 - It has a 1 hour cache for loaded HTML
 - It has a queue system for requests once the maximum number of pages/chromium instances is reached
+- **Not compatible** with other architectures than amd64 as Chrome-Beta is only built for `amd64` for now and is required.
 
 ## Usage
-
-1. <details><summary>Click if you have have a non amd64 device (ARM)</summary><p>
-
-    Build the Docker image with (replace `arm32v7` with your CPU architecture):
-
-    ```sh
-    docker build -t qmcgaw/htmlspitter --build-arg ARCH=arm32v7 https://github.com/qdm12/htmlspitter.git
-    ```
-
-    </p></details>
 
 1. Run the container
 

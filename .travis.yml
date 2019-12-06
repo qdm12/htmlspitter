@@ -1,8 +1,20 @@
-language: node_js
-node_js:
-  - "12.1"
+dist: xenial
 sudo: required
+git:
+  quiet: true
+  depth: 1
+env:
+  global:
+    - DOCKER_REPO=qmcgaw/htmlspitter
 before_install:
-  - npm i
-script:
-  - npm t
+  - curl -fsSL https://get.docker.com | sh
+  - echo '{"experimental":"enabled"}' | sudo tee /etc/docker/daemon.json
+  - mkdir -p $HOME/.docker
+  - echo '{"experimental":"enabled"}' | sudo tee $HOME/.docker/config.json
+  - sudo service docker start
+install:
+  - docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+  - docker buildx create --name xbuilder --use
+script: bash ci.sh
+after_success:
+  - curl -X POST https://hooks.microbadger.com/images/$DOCKER_REPO/WEBHOOK_LINK || exit 0
