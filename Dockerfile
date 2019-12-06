@@ -11,7 +11,6 @@ RUN npm t
 RUN npm run build
 
 FROM node:${NODE_VERSION}-buster-slim
-ARG ARCH=amd64
 ARG GOOGLE_CHROME_BRANCH=beta
 ARG VERSION
 ARG BUILD_DATE
@@ -32,7 +31,7 @@ RUN apt-get -qq update && \
     apt-get -qq install -y --no-install-recommends gnupg2 wget && \
     wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - && \
     apt-get -qq remove -y wget gnupg2 && \
-    sh -c 'echo "deb [arch=${ARCH}] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' && \
+    sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' && \
     apt-get -qq update && \
     apt-get -qq install -y --no-install-recommends google-chrome-${GOOGLE_CHROME_BRANCH} && \
     rm -rf /var/lib/apt/lists/*
