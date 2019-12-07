@@ -1,9 +1,7 @@
-ARG ALPINE_VERSION=3.10
 ARG NODE_VERSION=13.2
 
 FROM node:${NODE_VERSION}-buster-slim AS builder
 WORKDIR /htmlspitter
-ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1
 COPY package.json package-lock.json ./
 RUN npm install
 COPY . ./
@@ -40,8 +38,7 @@ RUN groupadd -r nonrootgroup && \
     mkdir -p /home/nonrootuser/Downloads && \
     chown -R nonrootuser:nonrootgroup /home/nonrootuser && \
     chown -R nonrootuser:nonrootgroup /htmlspitter
-ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1 \
-    CHROME_BIN=/usr/bin/google-chrome-${GOOGLE_CHROME_BRANCH} \
+ENV CHROME_BIN=/usr/bin/google-chrome-${GOOGLE_CHROME_BRANCH} \
     NODE_ENV=production
 HEALTHCHECK --interval=10s --timeout=3s --start-period=5s --retries=1 CMD [ "node", "./healthcheck.js" ]
 ENTRYPOINT [ "node", "./main.js" ]
