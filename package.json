@@ -28,7 +28,7 @@
     "homepage": "https://github.com/qdm12/htmlspitter#readme",
     "dependencies": {
         "debug": "^4.1.1",
-        "express": "^4.16.4",
+        "express": "^4.18.2",
         "node-fetch": "^2.3.0",
         "puppeteer-core": "^2.0.0",
         "supports-color": "^6.1.0",
